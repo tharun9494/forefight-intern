@@ -170,7 +170,7 @@ export default function CourseDetails2() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">Course not found</h2>
+          <h2 className="text-2xl font-bold mb-4">Course not found.</h2>
           <Button onClick={() => navigate('/programs')}>Return to Programs</Button>
         </div>
       </div>
