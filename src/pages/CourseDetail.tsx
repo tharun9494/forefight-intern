@@ -569,7 +569,7 @@ export default function CourseDetail() {
                   </li>
                   <li className="flex justify-between">
                     <span className="text-gray-600">Price:</span>
-                    <span className="font-semibold">${course.price}</span>
+                    <span className="font-semibold">{course.price}</span>
                   </li>
                 </ul>
               </div>
