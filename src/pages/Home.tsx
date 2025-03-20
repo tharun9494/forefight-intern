@@ -101,7 +101,7 @@ export default function Home() {
               transition={{ delay: 0.4 }}
               className="inline-block px-4 py-1 rounded-full bg-white/20 backdrop-blur-sm text-sm font-medium mb-4"
             >
-              Welcome to EduTech
+              Welcome to EDUFER
             </motion.span>
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}

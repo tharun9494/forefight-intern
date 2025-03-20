@@ -6,6 +6,7 @@ import { Button } from './ui/button';
 import AuthModal from './AuthModal';
 import { auth } from '@/lib/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
+import logo from '../imgaes/logo.png'
 
 export default function Navbar({ isAdmin }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -47,9 +48,10 @@ export default function Navbar({ isAdmin }) {
           <Link to="/" className="flex items-center space-x-2">
             <motion.div
               whileHover={{ scale: 1.1 }}
-              className="text-2xl font-bold text-indigo-600"
+              className="text-2xl font-bold text-orange-600"
             >
-              EduTech
+              <img src={logo} alt='' className="h-14 w-auto mt-0 opacity-80"></img>
+             
             </motion.div>
           </Link>
 
@@ -61,8 +63,8 @@ export default function Navbar({ isAdmin }) {
                 to={user || item.path === '/' || item.path === '/about' ? item.path : '/login'}
                 className={`${
                   location.pathname === item.path
-                    ? 'text-indigo-600'
-                    : 'text-gray-600 hover:text-indigo-600'
+                    ? 'text-orange-600'
+                    : 'text-gray-600 hover:text-orange-600'
                 } transition-colors duration-200 ${!(user || item.path === '/' || item.path === '/about') ? 'pointer-events-none opacity-50' : ''}`}
               >
                 {item.name}

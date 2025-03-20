@@ -24,7 +24,7 @@ function App() {
         if (user) {
           const userDoc = await getDoc(doc(db, 'users', user.uid));
           const userData = userDoc.data();
-          setIsAdmin(userData?.email === 'ontimittatharun2005@gmail.com');
+          setIsAdmin(userData?.email === 'edufertechnologies@gmail.com');
         } else {
           setIsAdmin(false);
         }

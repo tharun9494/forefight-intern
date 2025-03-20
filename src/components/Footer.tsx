@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin } from 'lucide-react';
+import { Facebook, Twitter, Instagram as InstagramIcon, Youtube, Mail, Phone, MapPin, Linkedin } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -10,24 +10,20 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <h3 className="text-2xl font-bold">EduTech</h3>
+            <h3 className="text-2xl font-bold">EDUFER TECHNOLOGIES PRIVATE LIMITED</h3>
             <p className="text-gray-400">
               Empowering learners worldwide with quality education and innovative
               learning experiences.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Facebook className="w-6 h-6" />
+             
+              <a href="https://www.linkedin.com/company/edufer-technologies/" className="text-gray-400 hover:text-white transition-colors">
+                <Linkedin className="w-6 h-6" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Twitter className="w-6 h-6" />
+              <a href="https://www.instagram.com/edufer_tech_solutions/profilecard/?igsh=MWdlc2Nxb3ozcjhpYQ==" className="text-gray-400 hover:text-white transition-colors">
+                <InstagramIcon className="w-6 h-6" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Instagram className="w-6 h-6" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Youtube className="w-6 h-6" />
-              </a>
+              
             </div>
           </div>
 
@@ -102,16 +98,16 @@ export default function Footer() {
               <li className="flex items-center space-x-3">
                 <MapPin className="w-5 h-5 text-indigo-400" />
                 <span className="text-gray-400">
-                  123 Education Street, Learning City, 12345
+                Madanpalle, pin 517325 ,AP
                 </span>
               </li>
               <li className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-indigo-400" />
-                <span className="text-gray-400">+1 (555) 123-4567</span>
+                <span className="text-gray-400">+91 9381033207</span>
               </li>
               <li className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-indigo-400" />
-                <span className="text-gray-400">contact@edutech.com</span>
+                <span className="text-gray-400">edufertechnologies@gmail.com</span>
               </li>
             </ul>
           </div>
@@ -119,7 +115,7 @@ export default function Footer() {
 
         <div className="border-t border-gray-800 mt-12 pt-8">
           <p className="text-center text-gray-400">
-            © {currentYear} EduTech. All rights reserved.
+            © {currentYear} EDUFER TECHNOLOGIES PRIVATE LIMITED. All rights reserved.
           </p>
         </div>
       </div>

@@ -4,6 +4,10 @@ import { Button } from '@/components/ui/button';
 import { db } from '@/lib/firebase';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import { useState } from 'react';
+import arfi from '../imgaes/arfi.jpeg'
+import dsp from '../imgaes/dsp.jpeg'
+import gowri from '../imgaes/gowri.jpg'
+import hari from '../imgaes/hari.jpg'
 
 export default function About() {
   const [successMessage, setSuccessMessage] = useState('');
@@ -12,12 +16,12 @@ export default function About() {
     {
       icon: BookOpen,
       label: 'Courses',
-      value: '100+'
+      value: '10+'
     },
     {
       icon: Users,
       label: 'Students',
-      value: '10,000+'
+      value: '500+'
     },
     {
       icon: Award,
@@ -28,19 +32,24 @@ export default function About() {
 
   const team = [
     {
-      name: 'Dr. Sarah Johnson',
-      role: 'Founder & CEO',
-      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80'
+      name: 'Sv Devisriprasad',
+      role: 'Founder',
+      image: dsp
     },
     {
-      name: 'Michael Chen',
-      role: 'Head of Education',
-      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80'
+      name: 'Kethineni Hari keshava',
+      role: 'Co-Founder',
+      image: hari
     },
     {
-      name: 'Emma Davis',
-      role: 'Lead Instructor',
-      image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&q=80'
+      name: 'Mugadi gowri shankar',
+      role: 'Managerial Director',
+      image: gowri
+    },
+    {
+      name: 'Patan arif',
+      role: 'CEO',
+      image: arfi
     }
   ];  
 
@@ -107,12 +116,12 @@ export default function About() {
           {/* Team Section */}
           <div className="mb-16">
             <h2 className="text-3xl font-bold mb-8 text-center">Our Team</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="flex flex-wrap justify-center gap-8">
               {team.map((member) => (
                 <motion.div
                   key={member.name}
                   whileHover={{ y: -5 }}
-                  className="bg-white rounded-xl shadow-lg overflow-hidden"
+                  className="bg-white rounded-xl shadow-lg overflow-hidden w-64"
                 >
                   <img
                     src={member.image}
@@ -135,19 +144,19 @@ export default function About() {
               <div className="space-y-6">
                 <div className="flex items-center space-x-4">
                   <MapPin className="w-6 h-6 text-indigo-600" />
-                  <span>123 Education Street, Learning City, 12345</span>
+                  <span>Madanpalle, pin 517325 ,AP</span>
                 </div>
                 <div className="flex items-center space-x-4">
                   <Phone className="w-6 h-6 text-indigo-600" />
-                  <span>+1 (555) 123-4567</span>
+                  <span>+91 9381033207</span>
                 </div>
                 <div className="flex items-center space-x-4">
                   <Mail className="w-6 h-6 text-indigo-600" />
-                  <span>contact@edutech.com</span>
+                  <span>edufertechnologies@gmail.com</span>
                 </div>
                 <div className="flex items-center space-x-4">
                   <Globe className="w-6 h-6 text-indigo-600" />
-                  <span>www.edutech.com</span>
+                  <span>edufer.vercel.app</span>
                 </div>
               </div>
               

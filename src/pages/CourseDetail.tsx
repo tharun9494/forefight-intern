@@ -71,9 +71,10 @@ export default function CourseDetail() {
       try {
         // Define your documents
         const courseDocuments: CourseDocument[] = [
-          { id: '1', title: 'Class 1 - TUPLE', path: 'Content/class13.docx' },
-          { id: '2', title: 'Class 2 - Lists', path: 'Content/class4.docx' },
-          { id: '3', title: 'Class 3 - Dictionaries', path: 'Content/class7.docx' },
+          { id: '1', title: 'Class 1 - TUPLE', path: 'metirial/class1_introduction to python.docx' },
+          { id: '2', title: 'Class 2 - Lists', path: 'metirial/class2_Variable and Naming conventions.docx' },
+          
+          
           
           // Add more documents as needed
         ];
@@ -106,7 +107,8 @@ export default function CourseDetail() {
   const fetchVideoContent = async () => {
     try {
       const videoDocuments: CourseDocument[] = [
-        { id: '1', title: 'Introduction to Python', path: 'Content_videos/class_1.mov' },
+        { id: '0', title: 'Introduction part1 ', path: 'Content_videos/start_video.mp4' },
+        { id: '1', title: 'Introduction part2', path: 'Content_videos/class_1.mov' },
         { id: '2', title: 'Basics of python ', path: 'Content_videos/CLASS_2 .mp4' },
         { id: '3', title: 'Data Types ', path: 'Content_videos/A_CLASS_3_Data_Types.mov' },
         { id: '4', title: 'Type Casting', path: 'Content_videos/A_CLASS_4_Type_Casting.mov' },
@@ -121,9 +123,9 @@ export default function CourseDetail() {
         { id: '13', title: 'DATASTRUCTURES', path: 'Content_videos/A_CLASS_13_DATA_STRUCTURES.mov' },
         { id: '14', title: 'LISTS', path: 'Content_videos/A_CLASS_14_LISTS.mov' },
         { id: '15', title: 'LIST OPERATIONS', path: 'Content_videos/A_CLASS_14_LIST_OPERATIONS_2.mov' },
-        { id: '16', title: '', path: 'Content_videos/' },
-        { id: '17', title: '', path: 'Content_videos/' },
-        { id: '18', title: '', path: 'Content_videos/' }, 
+        { id: '16', title: 'TUPLE', path: 'Content_videos/A_CLASS_15_TUPLE.mov' },
+        { id: '17', title: 'TUPLE Part1', path: 'Content_videos/A_CLASS_15_A_CLASS_15_TUPLE_P_1.mov.mov' },
+        { id: '18', title: 'TUPLE Part2', path: 'Content_videos/A_CLASS_15_TUPLE_P_2.mov' }, 
         { id: '19', title: 'DICTIONARY PART 1', path: 'Content_videos/A_CLASS_16_DICTIONARY_PART_1.mov' },
         { id: '20', title: 'DICTIONARY PART 2', path: 'Content_videos/A_CLASS_16_DICTIONARY_PART_2.mov' },
         { id: '21', title: 'SETS', path: 'Content_videos/A_CLASS_17_SETS.mov' },
@@ -138,7 +140,9 @@ export default function CourseDetail() {
         { id: '30', title: 'INHERITANCE', path: 'Content_videos/A_CLASS_26_INHERITANCE.mov' },
         { id: '31', title: 'BODMAS', path: 'Content_videos/A_CLASS_27_BODMAS.mov' },
         { id: '32', title: 'LOCAL GLOBAL VARIABLES', path: 'Content_videos/A_CLASS_28_LOCAL_GLOBAL_VARIABLES.mov' },
+        { id: '33', title: 'MODULES AND PACKAGES', path: 'Content_videos/A_CLASS_29_MODULES_AND_PACKAGES.mov' },
 
+        
         // Add more video documents as needed
       ];
 
