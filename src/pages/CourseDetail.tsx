@@ -71,8 +71,8 @@ export default function CourseDetail() {
       try {
         // Define your documents
         const courseDocuments: CourseDocument[] = [
-          { id: '1', title: 'Class 1 - TUPLE', path: 'metirial/class1_introduction to python.docx' },
-          { id: '2', title: 'Class 2 - Lists', path: 'metirial/class2_Variable and Naming conventions.docx' },
+          //{ id: '1', title: 'Class 1 - TUPLE', path: 'metirial/class1_introduction to python.docx' },
+          //{ id: '2', title: 'Class 2 - Lists', path: 'metirial/class2_Variable and Naming conventions.docx' },
           
           
           

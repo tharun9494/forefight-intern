@@ -32,22 +32,22 @@ export default function About() {
 
   const team = [
     {
-      name: 'Sv Devisriprasad',
-      role: 'Founder',
+      name: 'SV DEVISTIPRASAD',
+      role: 'FOUNDER',
       image: dsp
     },
     {
-      name: 'Kethineni Hari keshava',
-      role: 'Co-Founder',
+      name: 'KETHINENI HARI KESHAVA',
+      role: 'CO-FOUNDER',
       image: hari
     },
     {
-      name: 'Mugadi gowri shankar',
-      role: 'Managerial Director',
+      name: 'MUGADI GOWRI SHANKAR',
+      role: 'MANAGERIAL DIRECTOR',
       image: gowri
     },
     {
-      name: 'Patan arif',
+      name: 'PATAN ARIF',
       role: 'CEO',
       image: arfi
     }
