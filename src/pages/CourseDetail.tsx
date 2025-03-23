@@ -56,6 +56,7 @@ export default function CourseDetail() {
   const [input, setInput] = useState('');
   const [response, setResponse] = useState('');
   const [course, setCourse] = useState<Course | null>(null);
+  const [showAllVideos, setShowAllVideos] = useState(false);
 
   useEffect(() => {
     if (!initialCourse) {
@@ -187,14 +188,15 @@ export default function CourseDetail() {
     if (!video) return null;
 
     return (
-      <div className="bg-black rounded-lg overflow-hidden">
+      <div className="rounded-lg overflow-hidden">
+        <h3 className="text-lg font-semibold mb-2">{video.title}</h3>
         <select
           value={quality}
           onChange={(e) => setQuality(e.target.value)}
           className="mb-2 p-2 border rounded"
         >
           <option value="360p">360p</option>
-          <option value="480p">480p</option>  
+          <option value="480p">480p</option>
           <option value="720p">720p</option>
           <option value="1080p">1080p</option>
         </select>
@@ -202,13 +204,12 @@ export default function CourseDetail() {
           controls
           controlsList="nodownload"
           className="w-full aspect-video"
-          src={video.url} // You may want to adjust the URL based on quality
+          src={video.url}
           poster={video.thumbnail}
         >
           Your browser does not support the video tag.
         </video>
         <div className="p-4">
-          <h3 className="text-lg font-semibold mb-2">{video.title}</h3>
           <p className="text-gray-600">{video.description}</p>
         </div>
       </div>
@@ -361,47 +362,50 @@ export default function CourseDetail() {
                     </div>
                   </div>
 
-                  {/* Video Player */}
-                  {selectedVideo && (
-                    <div className="mb-6 relative">
-                      <VideoPlayer video={selectedVideo} />
+                  {/* Flex container for video player and video list */}
+                  <div className="flex">
+                    {/* Video Player */}
+                    <div className="flex-1 mr-4">
+                      {selectedVideo && (
+                        <VideoPlayer video={selectedVideo} />
+                      )}
+                    </div>
+
+                    {/* Video List */}
+                    <div className="flex-none w-64">
+                      <h3 className="text-lg font-semibold mb-3">Available Videos</h3>
+                      <div className="space-y-3">
+                        {course.videoContent?.slice(0, showAllVideos ? course.videoContent.length : 5).map((video, index) => (
+                          <motion.div
+                            key={index}
+                            whileHover={{ y: -2 }}
+                            className={`p-4 rounded-lg border cursor-pointer transition-colors ${
+                              selectedVideo?.title === video.title
+                                ? 'bg-indigo-50 border-indigo-200'
+                                : 'bg-white hover:bg-gray-50'
+                            }`}
+                            onClick={() => setSelectedVideo(video)}
+                          >
+                            <div className="flex items-center">
+                              <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center mr-4">
+                                <Play className="w-5 h-5 text-indigo-600" />
+                              </div>
+                              <div className="flex-1">
+                                <h3 className="font-semibold mb-1">{video.title}</h3>
+                                <p className="text-sm text-gray-600">{video.description}</p>
+                              </div>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
                       <button
-                        onClick={() => setSelectedVideo(null)}
-                        className="absolute top-2 right-2 bg-red-0 text-white rounded-full p-2"
+                        onClick={() => setShowAllVideos(!showAllVideos)}
+                        className="mt-4 text-indigo-600 hover:underline"
                       >
-                        X
+                        {showAllVideos ? 'Show Less' : 'Show More'}
                       </button>
                     </div>
-                  )}
-                  
-                  {/* Video List */}
-                  <div className="space-y-4">
-                    {course.videoContent?.map((video, index) => (
-                      <motion.div
-                        key={index}
-                        whileHover={{ y: -2 }}
-                        className={`p-4 rounded-lg border cursor-pointer transition-colors ${
-                          selectedVideo?.title === video.title
-                            ? 'bg-indigo-50 border-indigo-200'
-                            : 'bg-white hover:bg-gray-50'
-                        }`}
-                        onClick={() => setSelectedVideo(video)}
-                      >
-                        <div className="flex items-center">
-                          <div className="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center mr-4">
-                            <Play className="w-5 h-5 text-indigo-600" />
-                          </div>
-                          <div className="flex-1">
-                            <h3 className="font-semibold mb-1">{video.title}</h3>
-                            <p className="text-sm text-gray-600">{video.description}</p>
-                          </div>
-                        </div>
-                      </motion.div>
-                    ))}
                   </div>
-
-                  {/* Syllabus */}
-                 
                 </div>
               )}
 

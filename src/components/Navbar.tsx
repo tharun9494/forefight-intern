@@ -46,13 +46,11 @@ export default function Navbar({ isAdmin }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center space-x-2">
-            <motion.div
-              whileHover={{ scale: 1.1 }}
-              className="text-2xl font-bold text-orange-600"
-            >
+          
+            
               <img src={logo} alt='' className="h-14 w-auto mt-0 opacity-80"></img>
              
-            </motion.div>
+         
           </Link>
 
           {/* Desktop Navigation */}
