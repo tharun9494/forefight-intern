@@ -10,7 +10,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <h3 className="text-2xl font-bold">EDUFER TECHNOLOGIES PRIVATE LIMITED</h3>
+            <h3 className="text-2xl font-bold">FOREFIGHT ERA PRIVATE LIMITED</h3>
             <p className="text-gray-400">
               Empowering learners worldwide with quality education and innovative
               learning experiences.
@@ -32,14 +32,14 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                
+              <Link to="/programs" className="text-gray-400 hover:text-white transition-colors">
                   Programs
-              
+              </Link>
               </li>
               <li>
-               
+              <Link to="/blogs" className="text-gray-400 hover:text-white transition-colors">
                   Blogs
-              
+              </Link>
               </li>
               <li>
                 <Link to="/about" className="text-gray-400 hover:text-white transition-colors">
@@ -47,12 +47,12 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="#" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/terms" className="text-gray-400 hover:text-white transition-colors">
                   Terms & Conditions
                 </Link>
               </li>
               <li>
-                <Link to="#" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/privacy" className="text-gray-400 hover:text-white transition-colors">
                   Privacy Policy
                 </Link>
               </li>
@@ -80,14 +80,17 @@ export default function Footer() {
               </li>
               <li>
                 <Link to="#" className="text-gray-400 hover:text-white transition-colors">
-                  Mobile Development
+                 Python
                 </Link>
               </li>
               <li>
                 <Link to="#" className="text-gray-400 hover:text-white transition-colors">
-                  Cloud Computing
+                  SQl
                 </Link>
               </li>
+              <Link to="#" className="text-gray-400 hover:text-white transition-colors">
+                  Data Visualization
+                </Link>
             </ul>
           </div>
 
@@ -103,11 +106,11 @@ export default function Footer() {
               </li>
               <li className="flex items-center space-x-3">
                 <Phone className="w-5 h-5 text-indigo-400" />
-                <span className="text-gray-400">+91 9381033207</span>
+                <span className="text-gray-400">+91 8919403905</span>
               </li>
               <li className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-indigo-400" />
-                <span className="text-gray-400">edufertechnologies@gmail.com</span>
+                <span className="text-gray-400">forefightera@gmail.com</span>
               </li>
             </ul>
           </div>
@@ -115,7 +118,7 @@ export default function Footer() {
 
         <div className="border-t border-gray-800 mt-12 pt-8">
           <p className="text-center text-gray-400">
-            © {currentYear} EDUFER TECHNOLOGIES PRIVATE LIMITED. All rights reserved.
+            © {currentYear} FOREFIGHT ERA PRIVATE LIMITED. All rights reserved.
           </p>
         </div>
       </div>

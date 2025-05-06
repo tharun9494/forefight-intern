@@ -6,9 +6,13 @@ import { Button } from './ui/button';
 import AuthModal from './AuthModal';
 import { auth } from '@/lib/firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
-import logo from '../imgaes/logo.png'
+import logo1 from '../imgaes/logo1.png'
 
-export default function Navbar({ isAdmin }) {
+interface NavbarProps {
+  isAdmin: boolean;
+}
+
+export default function Navbar({ isAdmin }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [user, setUser] = useState(auth.currentUser);
@@ -46,11 +50,10 @@ export default function Navbar({ isAdmin }) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center space-x-2">
-          
-            
-              <img src={logo} alt='' className="h-14 w-auto mt-0 opacity-80"></img>
-             
-         
+            <img src={logo1} alt='' className="h-20 w-auto mt-0 opacity-80"></img>
+            <span className="text-2xl font-bold bg-gradient-to-r from-yellow-500 to-yellow-700 bg-clip-text text-transparent">
+              ForeFight Era
+            </span>
           </Link>
 
           {/* Desktop Navigation */}

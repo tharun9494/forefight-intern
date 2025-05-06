@@ -148,15 +148,15 @@ export default function About() {
                 </div>
                 <div className="flex items-center space-x-4">
                   <Phone className="w-6 h-6 text-indigo-600" />
-                  <span>+91 9381033207</span>
+                  <span>+91 8919403905</span>
                 </div>
                 <div className="flex items-center space-x-4">
                   <Mail className="w-6 h-6 text-indigo-600" />
-                  <span>edufertechnologies@gmail.com</span>
+                  <span>forefightera@gmail.com</span>
                 </div>
                 <div className="flex items-center space-x-4">
                   <Globe className="w-6 h-6 text-indigo-600" />
-                  <span>edufer.vercel.app</span>
+                  <span>www.forefightera.in</span>
                 </div>
               </div>
               
