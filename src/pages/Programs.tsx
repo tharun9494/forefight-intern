@@ -252,7 +252,7 @@ export default function Programs() {
 
                     <div className="flex items-center justify-between">
                       <span className="text-2xl font-bold text-indigo-600">
-                        INR: {program.price}
+                        ₹{program.price}
                       </span>
                       <div className="flex space-x-2">
                         <Button 
