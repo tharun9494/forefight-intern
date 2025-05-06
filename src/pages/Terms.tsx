@@ -36,7 +36,7 @@ export default function Terms() {
                 </ul>
               </div>
             </section>
-
+    
             {/* Refund Policy */}
             <section>
               <h2 className="text-2xl font-semibold mb-4">3. Refund Policy</h2>
@@ -48,7 +48,7 @@ export default function Terms() {
                   <li>Full refund within 7 days of purchase if no course content has been accessed</li>
                   <li>50% refund within 14 days if less than 25% of the course content has been accessed</li>
                   <li>No refunds after 14 days or if more than 25% of the course content has been accessed</li>
-                  <li>Refunds will be processed within 7-10 business days</li>
+                  <li>Refunds will be credited within 7-10 business days</li>
                   <li>Refunds will be issued to the original payment method</li>
                 </ul>
               </div>

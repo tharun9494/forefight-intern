@@ -285,6 +285,24 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleEditBlog = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingBlog) return;
+
+    try {
+      await updateDoc(doc(db, 'blogs', editingBlog.id), {
+        ...editingBlog,
+        updatedAt: new Date().toISOString()
+      });
+      toast.success('Blog updated successfully!');
+      setEditingBlog(null);
+      fetchBlogs();
+    } catch (error) {
+      console.error('Error updating blog:', error);
+      toast.error('Failed to update blog');
+    }
+  };
+
   const handleDeleteBlog = async (blogId: string) => {
     if (window.confirm('Are you sure you want to delete this blog post?')) {
       try {
@@ -905,61 +923,76 @@ export default function AdminDashboard() {
 
                 {editingBlog && (
                   <div className="mb-6">
-                    <form
-                      onSubmit={async (e) => {
-                        e.preventDefault();
-                        try {
-                          await updateDoc(doc(db, 'blogs', editingBlog.id), {
-                            ...editingBlog,
-                            updatedAt: new Date().toISOString(),
-                          });
-                          toast.success('Blog updated successfully!');
-                          setEditingBlog(null);
-                          fetchBlogs();
-                        } catch (error) {
-                          toast.error('Failed to update blog');
-                        }
-                      }}
-                      className="space-y-4"
-                    >
-                      <input
-                        type="text"
-                        className="w-full p-2 border rounded"
-                        value={editingBlog.title}
-                        onChange={(e) => setEditingBlog({ ...editingBlog, title: e.target.value })}
-                        required
-                      />
-                      <input
-                        type="text"
-                        className="w-full p-2 border rounded"
-                        value={editingBlog.category}
-                        onChange={(e) => setEditingBlog({ ...editingBlog, category: e.target.value })}
-                        required
-                      />
-                      <input
-                        type="url"
-                        className="w-full p-2 border rounded"
-                        value={editingBlog.titleImageUrl}
-                        onChange={(e) => setEditingBlog({ ...editingBlog, titleImageUrl: e.target.value })}
-                        required
-                      />
-                      <textarea
-                        className="w-full p-2 border rounded h-20"
-                        value={editingBlog.excerpt}
-                        onChange={(e) => setEditingBlog({ ...editingBlog, excerpt: e.target.value })}
-                        required
-                      />
-                      <textarea
-                        className="w-full p-2 border rounded h-40"
-                        value={editingBlog.matter}
-                        onChange={(e) => setEditingBlog({ ...editingBlog, matter: e.target.value })}
-                        required
-                      />
-                      <textarea
-                        className="w-full p-2 border rounded h-20"
-                        value={editingBlog.references}
-                        onChange={(e) => setEditingBlog({ ...editingBlog, references: e.target.value })}
-                      />
+                    <form onSubmit={handleEditBlog} className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Blog Title</label>
+                          <input
+                            type="text"
+                            placeholder="Enter blog title"
+                            className="w-full p-2 border rounded"
+                            value={editingBlog.title}
+                            onChange={(e) => setEditingBlog({ ...editingBlog, title: e.target.value })}
+                            required
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                          <input
+                            type="text"
+                            placeholder="Enter category"
+                            className="w-full p-2 border rounded"
+                            value={editingBlog.category}
+                            onChange={(e) => setEditingBlog({ ...editingBlog, category: e.target.value })}
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Title Image URL</label>
+                        <input
+                          type="url"
+                          placeholder="Enter title image URL"
+                          className="w-full p-2 border rounded"
+                          value={editingBlog.titleImageUrl}
+                          onChange={(e) => setEditingBlog({ ...editingBlog, titleImageUrl: e.target.value })}
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Excerpt</label>
+                        <textarea
+                          placeholder="Enter a brief excerpt"
+                          className="w-full p-2 border rounded h-20"
+                          value={editingBlog.excerpt}
+                          onChange={(e) => setEditingBlog({ ...editingBlog, excerpt: e.target.value })}
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Blog Content</label>
+                        <textarea
+                          placeholder="Enter the main content"
+                          className="w-full p-2 border rounded h-40"
+                          value={editingBlog.matter}
+                          onChange={(e) => setEditingBlog({ ...editingBlog, matter: e.target.value })}
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">References</label>
+                        <textarea
+                          placeholder="Enter references (one per line)"
+                          className="w-full p-2 border rounded h-20"
+                          value={editingBlog.references}
+                          onChange={(e) => setEditingBlog({ ...editingBlog, references: e.target.value })}
+                        />
+                      </div>
+
                       <div className="flex justify-end space-x-4">
                         <Button
                           type="button"
