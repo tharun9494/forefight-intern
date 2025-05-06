@@ -32,12 +32,12 @@ export default function About() {
 
   const team = [
     {
-      name: 'SV DEVISTIPRASAD',
+      name: 'Ontimitta Tharun',
       role: 'FOUNDER',
-      image: dsp
+      image: 'https://media.licdn.com/dms/image/v2/D5622AQGI5-9hBe2aMw/feedshare-shrink_1280/feedshare-shrink_1280/0/1727727673565?e=1749686400&v=beta&t=iFNMkKq8TkCSOv5TcgzFRDmHPrewVMQ8qW_I1Bj5uOg'
     },
     {
-      name: 'KETHINENI HARI KESHAVA',
+      name: 'Kothala Prem sai',
       role: 'CO-FOUNDER',
       image: hari
     },
@@ -50,6 +50,36 @@ export default function About() {
       name: 'PATAN ARIF',
       role: 'CEO',
       image: arfi
+    },
+    {
+      name: 'TEAM MEMBER 5',
+      role: 'SENIOR DEVELOPER',
+      image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+    },
+    {
+      name: 'TEAM MEMBER 6',
+      role: 'UI/UX DESIGNER',
+      image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+    },
+    {
+      name: 'TEAM MEMBER 7',
+      role: 'CONTENT WRITER',
+      image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+    },
+    {
+      name: 'TEAM MEMBER 8',
+      role: 'MARKETING MANAGER',
+      image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+    },
+    {
+      name: 'TEAM MEMBER 9',
+      role: 'SUPPORT TEAM',
+      image: 'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+    },
+    {
+      name: 'TEAM MEMBER 10',
+      role: 'TECHNICAL SUPPORT',
+      image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
     }
   ];  
 
@@ -116,24 +146,69 @@ export default function About() {
           {/* Team Section */}
           <div className="mb-16">
             <h2 className="text-3xl font-bold mb-8 text-center">Our Team</h2>
-            <div className="flex flex-wrap justify-center gap-8">
-              {team.map((member) => (
+            <div className="flex flex-col items-center">
+              {/* Founder Level */}
+              <div className="mb-16">
                 <motion.div
-                  key={member.name}
-                  whileHover={{ y: -5 }}
-                  className="bg-white rounded-xl shadow-lg overflow-hidden w-64"
+                  whileHover={{ scale: 1.05, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+                  className="bg-gradient-to-br from-indigo-50 to-white rounded-full shadow-xl overflow-hidden w-56 h-56 mx-auto mb-6 relative"
                 >
+                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent"></div>
                   <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-full h-64 object-cover"
+                    src={team[0].image}
+                    alt={team[0].name}
+                    className="w-full h-full object-cover"
                   />
-                  <div className="p-6 text-center">
-                    <h3 className="text-xl font-bold mb-2">{member.name}</h3>
-                    <p className="text-gray-600">{member.role}</p>
-                  </div>
                 </motion.div>
-              ))}
+                <div className="text-center">
+                  <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">{team[0].name}</h3>
+                  <p className="text-gray-600 mt-2">{team[0].role}</p>
+                </div>
+              </div>
+
+              {/* Co-Founder Level */}
+              <div className="flex justify-center gap-16 mb-16">
+                {team.slice(1, 3).map((member, index) => (
+                  <motion.div
+                    key={member.name}
+                    whileHover={{ scale: 1.05, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+                    className="text-center"
+                  >
+                    <div className="bg-gradient-to-br from-indigo-50 to-white rounded-full shadow-xl overflow-hidden w-48 h-48 mx-auto mb-6 relative">
+                      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent"></div>
+                      <img
+                        src={member.image}
+                        alt={member.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <h3 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">{member.name}</h3>
+                    <p className="text-gray-600 mt-2">{member.role}</p>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Team Members Level */}
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+                {team.slice(3).map((member) => (
+                  <motion.div
+                    key={member.name}
+                    whileHover={{ scale: 1.05, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+                    className="text-center"
+                  >
+                    <div className="bg-gradient-to-br from-indigo-50 to-white rounded-full shadow-xl overflow-hidden w-40 h-40 mx-auto mb-4 relative">
+                      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent"></div>
+                      <img
+                        src={member.image}
+                        alt={member.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <h3 className="text-lg font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">{member.name}</h3>
+                    <p className="text-sm text-gray-600 mt-1">{member.role}</p>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </div>
 

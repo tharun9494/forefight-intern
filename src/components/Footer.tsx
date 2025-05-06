@@ -7,7 +7,7 @@ export default function Footer() {
   return (
     <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
             <h3 className="text-2xl font-bold">FOREFIGHT ERA PRIVATE LIMITED</h3>
@@ -16,14 +16,21 @@ export default function Footer() {
               learning experiences.
             </p>
             <div className="flex space-x-4">
-             
+              <a href="https://www.facebook.com/forefightera" className="text-gray-400 hover:text-white transition-colors">
+                <Facebook className="w-6 h-6" />
+              </a>
+              <a href="https://twitter.com/forefightera" className="text-gray-400 hover:text-white transition-colors">
+                <Twitter className="w-6 h-6" />
+              </a>
               <a href="https://www.linkedin.com/company/edufer-technologies/" className="text-gray-400 hover:text-white transition-colors">
                 <Linkedin className="w-6 h-6" />
               </a>
               <a href="https://www.instagram.com/edufer_tech_solutions/profilecard/?igsh=MWdlc2Nxb3ozcjhpYQ==" className="text-gray-400 hover:text-white transition-colors">
                 <InstagramIcon className="w-6 h-6" />
               </a>
-              
+              <a href="https://www.youtube.com/@forefightera" className="text-gray-400 hover:text-white transition-colors">
+                <Youtube className="w-6 h-6" />
+              </a>
             </div>
           </div>
 
@@ -32,14 +39,14 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-              <Link to="/programs" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/programs" className="text-gray-400 hover:text-white transition-colors">
                   Programs
-              </Link>
+                </Link>
               </li>
               <li>
-              <Link to="/blogs" className="text-gray-400 hover:text-white transition-colors">
+                <Link to="/blogs" className="text-gray-400 hover:text-white transition-colors">
                   Blogs
-              </Link>
+                </Link>
               </li>
               <li>
                 <Link to="/about" className="text-gray-400 hover:text-white transition-colors">
@@ -59,41 +66,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Programs */}
-          <div>
-            <h3 className="text-lg font-semibold mb-4">Popular Programs</h3>
-            <ul className="space-y-2">
-              <li>
-                <Link to="#" className="text-gray-400 hover:text-white transition-colors">
-                  Web Development
-                </Link>
-              </li>
-              <li>
-                <Link to="#" className="text-gray-400 hover:text-white transition-colors">
-                  Data Science
-                </Link>
-              </li>
-              <li>
-                <Link to="#" className="text-gray-400 hover:text-white transition-colors">
-                  UI/UX Design
-                </Link>
-              </li>
-              <li>
-                <Link to="#" className="text-gray-400 hover:text-white transition-colors">
-                 Python
-                </Link>
-              </li>
-              <li>
-                <Link to="#" className="text-gray-400 hover:text-white transition-colors">
-                  SQl
-                </Link>
-              </li>
-              <Link to="#" className="text-gray-400 hover:text-white transition-colors">
-                  Data Visualization
-                </Link>
-            </ul>
-          </div>
-
           {/* Contact Info */}
           <div>
             <h3 className="text-lg font-semibold mb-4">Contact Us</h3>
@@ -101,7 +73,7 @@ export default function Footer() {
               <li className="flex items-center space-x-3">
                 <MapPin className="w-5 h-5 text-indigo-400" />
                 <span className="text-gray-400">
-                Madanpalle, pin 517325 ,AP
+                  Madanpalle, pin 517325, AP
                 </span>
               </li>
               <li className="flex items-center space-x-3">
