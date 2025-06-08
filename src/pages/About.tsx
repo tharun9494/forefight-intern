@@ -32,24 +32,14 @@ export default function About() {
 
   const team = [
     {
-      name: 'SV DEVISTIPRASAD',
+      name: 'Ontimitta Tharun',
       role: 'FOUNDER',
-      image: dsp
+      image: 'https://www.forefightera.in/assets/Tharun-C6RsZTH9.jpeg'
     },
     {
-      name: 'KETHINENI HARI KESHAVA',
+      name: 'Kothala Prem sai',
       role: 'CO-FOUNDER',
-      image: hari
-    },
-    {
-      name: 'MUGADI GOWRI SHANKAR',
-      role: 'MANAGERIAL DIRECTOR',
-      image: gowri
-    },
-    {
-      name: 'PATAN ARIF',
-      role: 'CEO',
-      image: arfi
+      image: 'https://www.forefightera.in/assets/Prem-D5sTfgQ1.png'
     }
   ];  
 
@@ -116,24 +106,40 @@ export default function About() {
           {/* Team Section */}
           <div className="mb-16">
             <h2 className="text-3xl font-bold mb-8 text-center">Our Team</h2>
-            <div className="flex flex-wrap justify-center gap-8">
-              {team.map((member) => (
-                <motion.div
-                  key={member.name}
-                  whileHover={{ y: -5 }}
-                  className="bg-white rounded-xl shadow-lg overflow-hidden w-64"
-                >
+            <div className="flex justify-center items-center gap-16">
+              {/* Founder */}
+              <motion.div
+                whileHover={{ scale: 1.05, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+                className="text-center"
+              >
+                <div className="bg-gradient-to-br from-indigo-50 to-white rounded-lg shadow-xl overflow-hidden w-80 h-80 mx-auto mb-6 relative">
+                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent"></div>
                   <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-full h-64 object-cover"
+                    src={team[0].image}
+                    alt={team[0].name}
+                    className="w-full h-full object-cover"
                   />
-                  <div className="p-6 text-center">
-                    <h3 className="text-xl font-bold mb-2">{member.name}</h3>
-                    <p className="text-gray-600">{member.role}</p>
-                  </div>
-                </motion.div>
-              ))}
+                </div>
+                <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">{team[0].name}</h3>
+                <p className="text-gray-600 mt-2">{team[0].role}</p>
+              </motion.div>
+
+              {/* Co-Founder */}
+              <motion.div
+                whileHover={{ scale: 1.05, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
+                className="text-center"
+              >
+                <div className="bg-gradient-to-br from-indigo-50 to-white rounded-lg shadow-xl overflow-hidden w-80 h-80 mx-auto mb-6 relative">
+                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent"></div>
+                  <img
+                    src={team[1].image}
+                    alt={team[1].name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">{team[1].name}</h3>
+                <p className="text-gray-600 mt-2">{team[1].role}</p>
+              </motion.div>
             </div>
           </div>
 

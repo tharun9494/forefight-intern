@@ -254,24 +254,22 @@ export default function Programs() {
                       <span className="text-2xl font-bold text-indigo-600">
                         ₹{program.price}
                       </span>
-                      <div className="flex space-x-2">
-                        <Button 
-                          variant="outline"
-                          onClick={() => handleViewDetails(program.id)}
-                        >
-                          {hasAccess ? (
-                            <>
-                              View Details
-                              <ArrowRight className="ml-2 h-4 w-4" />
-                            </>
-                          ) : (
-                            <>
-                              <Lock className="mr-2 h-4 w-4" />
-                              Access Required
-                            </>
-                          )}
-                        </Button>
-                      </div>
+                      <Button 
+                        variant="outline"
+                        onClick={() => handleViewDetails(program.id)}
+                      >
+                        {hasAccess ? (
+                          <>
+                            View Details
+                            <ArrowRight className="ml-2 h-4 w-4" />
+                          </>
+                        ) : (
+                          <>
+                            <Lock className="mr-2 h-4 w-4" />
+                            Access Required
+                          </>
+                        )}
+                      </Button>
                     </div>
                   </div>
                 </motion.div>
