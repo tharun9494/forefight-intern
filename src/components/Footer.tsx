@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Facebook, Twitter, Instagram as InstagramIcon, Youtube, Mail, Phone, MapPin, Linkedin } from 'lucide-react';
+import { Instagram as InstagramIcon, Youtube, Mail, Phone, MapPin, Linkedin } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -16,19 +16,31 @@ export default function Footer() {
               learning experiences.
             </p>
             <div className="flex space-x-4">
-              <a href="https://www.facebook.com/forefightera" className="text-gray-400 hover:text-white transition-colors">
-                <Facebook className="w-6 h-6" />
-              </a>
-              <a href="https://twitter.com/forefightera" className="text-gray-400 hover:text-white transition-colors">
-                <Twitter className="w-6 h-6" />
-              </a>
-              <a href="https://www.linkedin.com/company/edufer-technologies/" className="text-gray-400 hover:text-white transition-colors">
+              <a
+                href="https://www.linkedin.com/in/ontimitta-tharun-8510842aa/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white transition-colors"
+                aria-label="LinkedIn"
+              >
                 <Linkedin className="w-6 h-6" />
               </a>
-              <a href="https://www.instagram.com/edufer_tech_solutions/profilecard/?igsh=MWdlc2Nxb3ozcjhpYQ==" className="text-gray-400 hover:text-white transition-colors">
+              <a
+                href="https://www.instagram.com/forefight_era/?hl=en"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white transition-colors"
+                aria-label="Instagram"
+              >
                 <InstagramIcon className="w-6 h-6" />
               </a>
-              <a href="https://www.youtube.com/@forefightera" className="text-gray-400 hover:text-white transition-colors">
+              <a
+                href="https://www.youtube.com/@forefightera"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white transition-colors"
+                aria-label="YouTube"
+              >
                 <Youtube className="w-6 h-6" />
               </a>
             </div>
@@ -44,8 +56,9 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link to="/blogs" className="text-gray-400 hover:text-white transition-colors">
-                  Blogs
+                <Link to="/internship" className="text-amber-400 font-semibold hover:text-amber-300 transition-colors flex items-center">
+                  <span>Internship Portal</span>
+                  <span className="ml-2 text-[10px] bg-amber-500/20 text-amber-300 px-1.5 py-0.5 rounded border border-amber-500/30">Hiring</span>
                 </Link>
               </li>
               <li>

@@ -20,6 +20,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import CourseDetails from '@/pages/CourseDetails';
+import Internship from './pages/Internship';
 
 function App() {
   const [isAdmin, setIsAdmin] = useState(false);
@@ -53,6 +54,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/programs" element={<Programs />} />
+              <Route path="/internship" element={<Internship />} />
               <Route path="/programs/:id" element={<CourseDetail />} />
               <Route path="/programs/course-detail" element={<CourseDetail />} />
               <Route path="/blogs" element={<Blogs />} />

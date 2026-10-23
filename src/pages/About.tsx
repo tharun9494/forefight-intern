@@ -3,14 +3,18 @@ import { Mail, MapPin, Phone, Globe, BookOpen, Users, Award } from 'lucide-react
 import { Button } from '@/components/ui/button';
 import { db } from '@/lib/firebase';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
-import { useState } from 'react';
-import arfi from '../imgaes/arfi.jpeg'
-import dsp from '../imgaes/dsp.jpeg'
-import gowri from '../imgaes/gowri.jpg'
-import hari from '../imgaes/hari.jpg'
-
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 export default function About() {
   const [successMessage, setSuccessMessage] = useState('');
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash === '#contact') {
+      const el = document.getElementById('contact');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [location]);
 
   const stats = [
     {
@@ -34,12 +38,16 @@ export default function About() {
     {
       name: 'Ontimitta Tharun',
       role: 'FOUNDER',
-      image: 'https://www.forefightera.in/assets/Tharun-C6RsZTH9.jpeg'
+      title: 'ForeFight Era Pvt. Ltd.',
+      initials: 'OT',
+      gradient: 'from-amber-500 to-orange-600',
     },
     {
       name: 'Kothala Prem sai',
       role: 'CO-FOUNDER',
-      image: 'https://www.forefightera.in/assets/Prem-D5sTfgQ1.png'
+      title: 'ForeFight Era Pvt. Ltd.',
+      initials: 'KP',
+      gradient: 'from-orange-500 to-amber-600',
     }
   ];  
 
@@ -105,64 +113,47 @@ export default function About() {
 
           {/* Team Section */}
           <div className="mb-16">
-            <h2 className="text-3xl font-bold mb-8 text-center">Our Team</h2>
-            <div className="flex justify-center items-center gap-16">
-              {/* Founder */}
-              <motion.div
-                whileHover={{ scale: 1.05, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
-                className="text-center"
-              >
-                <div className="bg-gradient-to-br from-indigo-50 to-white rounded-lg shadow-xl overflow-hidden w-80 h-80 mx-auto mb-6 relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent"></div>
-                  <img
-                    src={team[0].image}
-                    alt={team[0].name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">{team[0].name}</h3>
-                <p className="text-gray-600 mt-2">{team[0].role}</p>
-              </motion.div>
-
-              {/* Co-Founder */}
-              <motion.div
-                whileHover={{ scale: 1.05, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
-                className="text-center"
-              >
-                <div className="bg-gradient-to-br from-indigo-50 to-white rounded-lg shadow-xl overflow-hidden w-80 h-80 mx-auto mb-6 relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent"></div>
-                  <img
-                    src={team[1].image}
-                    alt={team[1].name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <h3 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">{team[1].name}</h3>
-                <p className="text-gray-600 mt-2">{team[1].role}</p>
-              </motion.div>
+            <h2 className="text-3xl font-bold mb-3 text-center text-gray-900">Leadership Team</h2>
+            <p className="text-gray-600 text-center max-w-xl mx-auto mb-8 text-sm">
+              Dedicated founders committed to advancing modern digital skills and technical education.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+              {team.map((member) => (
+                <motion.div
+                  key={member.name}
+                  whileHover={{ y: -4, boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.08)" }}
+                  className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm text-center transition-all"
+                >
+                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{member.name}</h3>
+                  <span className="inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-orange-700 bg-orange-100 mb-2">
+                    {member.role}
+                  </span>
+                  <p className="text-xs text-gray-500 font-medium">{member.title}</p>
+                </motion.div>
+              ))}
             </div>
           </div>
 
           {/* Contact Section */}
-          <div className="bg-white rounded-xl shadow-lg p-8">
-            <h2 className="text-3xl font-bold mb-8 text-center">Contact Us</h2>
+          <div id="contact" className="bg-white rounded-xl shadow-lg p-8 scroll-mt-24 border border-gray-100">
+            <h2 className="text-3xl font-bold mb-8 text-center text-gray-900">Contact Us</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <div className="space-y-6">
                 <div className="flex items-center space-x-4">
-                  <MapPin className="w-6 h-6 text-indigo-600" />
-                  <span>Madanpalle, pin 517325 ,AP</span>
+                  <MapPin className="w-6 h-6 text-orange-600" />
+                  <span className="text-gray-700">ForeFight Era Pvt. Ltd., Madanapalle, pin 517325, AP</span>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <Phone className="w-6 h-6 text-indigo-600" />
-                  <span>+91 8919403905</span>
+                  <Phone className="w-6 h-6 text-orange-600" />
+                  <span className="text-gray-700">+91 8919403905</span>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <Mail className="w-6 h-6 text-indigo-600" />
-                  <span>forefightera@gmail.com</span>
+                  <Mail className="w-6 h-6 text-orange-600" />
+                  <span className="text-gray-700">forefightera@gmail.com</span>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <Globe className="w-6 h-6 text-indigo-600" />
-                  <span>www.forefightera.in</span>
+                  <Globe className="w-6 h-6 text-orange-600" />
+                  <a href="https://www.forefightedu.com/" className="text-orange-600 hover:underline font-semibold">www.forefightedu.com</a>
                 </div>
               </div>
               

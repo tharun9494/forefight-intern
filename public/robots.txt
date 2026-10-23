@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Allow: /internship
+Allow: /programs
+Allow: /about
+Allow: /blogs
+
+Sitemap: https://www.forefightedu.com/sitemap.xml

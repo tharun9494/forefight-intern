@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Menu, X, LogIn, User } from 'lucide-react';
+import { Menu, X, LogIn, User, Briefcase } from 'lucide-react';
 import { Button } from './ui/button';
 import AuthModal from './AuthModal';
 import { auth } from '@/lib/firebase';
@@ -30,9 +30,10 @@ export default function Navbar({ isAdmin }: NavbarProps) {
 
   const navItems = [
     { name: 'Home', path: '/' },
-    { name: 'Programs', path: '/programs' },
-    { name: 'Blogs', path: '/blogs' },
     { name: 'About Us', path: '/about' },
+    { name: 'Programs', path: '/programs' },
+    { name: 'Internship', path: '/internship', highlight: true },
+    { name: 'Contact Us', path: '/about#contact' },
   ];
 
   const handleSignOut = async () => {
@@ -46,30 +47,44 @@ export default function Navbar({ isAdmin }: NavbarProps) {
   };
 
   return (
-    <nav className="fixed w-full bg-white/80 backdrop-blur-md z-50 shadow-sm">
+    <nav className="fixed w-full bg-white/90 backdrop-blur-md z-50 shadow-sm border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center space-x-2">
-            <img src={logo1} alt='' className="h-20 w-auto mt-0 opacity-80"></img>
+            <img src={logo1} alt='ForeFight Era Logo' className="h-16 w-auto mt-0 opacity-90"></img>
             <span className="text-2xl font-bold bg-gradient-to-r from-yellow-500 to-yellow-700 bg-clip-text text-transparent">
               ForeFight Era
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
             {navItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                className={`${
-                  location.pathname === item.path
-                    ? 'text-orange-600'
-                    : 'text-gray-600 hover:text-orange-600'
-                } transition-colors duration-200`}
-              >
-                {item.name}
-              </Link>
+              item.highlight ? (
+                <Link
+                  key={item.name}
+                  to={item.path}
+                  className="relative inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold text-white bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 shadow-md hover:from-amber-600 hover:to-orange-700 transition-all duration-200 transform hover:scale-105 border border-amber-300/40 ring-2 ring-orange-400/30"
+                >
+                  <Briefcase className="w-3.5 h-3.5 mr-1.5 text-amber-100" />
+                  <span>{item.name}</span>
+                  <span className="ml-1.5 px-1.5 py-0.2 text-[9px] font-extrabold uppercase tracking-wide bg-white/25 rounded-full">
+                    Hiring
+                  </span>
+                </Link>
+              ) : (
+                <Link
+                  key={item.name}
+                  to={item.path}
+                  className={`${
+                    location.pathname === item.path
+                      ? 'text-orange-600 font-semibold'
+                      : 'text-gray-700 hover:text-orange-600 font-medium'
+                  } transition-colors duration-200 text-sm`}
+                >
+                  {item.name}
+                </Link>
+              )
             ))}
             
             {user ? (
@@ -149,14 +164,31 @@ export default function Navbar({ isAdmin }: NavbarProps) {
         >
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white shadow-lg">
             {navItems.map((item) => (
-              <Link
-                key={item.name}
-                to={item.path}
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
-                onClick={() => setIsOpen(false)}
-              >
-                {item.name}
-              </Link>
+              item.highlight ? (
+                <Link
+                  key={item.name}
+                  to={item.path}
+                  className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 shadow-md my-1"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <span className="flex items-center">
+                    <Briefcase className="w-4 h-4 mr-2 text-amber-100" />
+                    {item.name}
+                  </span>
+                  <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full font-semibold">
+                    Apply Now
+                  </span>
+                </Link>
+              ) : (
+                <Link
+                  key={item.name}
+                  to={item.path}
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-orange-600 hover:bg-orange-50"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {item.name}
+                </Link>
+              )
             ))}
             {user ? (
               <>
