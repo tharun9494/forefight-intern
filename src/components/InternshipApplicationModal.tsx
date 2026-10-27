@@ -194,8 +194,8 @@ export default function InternshipApplicationModal({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <label
                       className={`flex items-center p-3 rounded-xl border cursor-pointer transition-all ${formData.domain === 'Web Development Internship'
-                          ? 'border-orange-500 bg-orange-50/60 ring-2 ring-orange-500/20'
-                          : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-orange-500 bg-orange-50/60 ring-2 ring-orange-500/20'
+                        : 'border-gray-200 hover:border-gray-300'
                         }`}
                     >
                       <input
@@ -214,8 +214,8 @@ export default function InternshipApplicationModal({
 
                     <label
                       className={`flex items-center p-3 rounded-xl border cursor-pointer transition-all ${formData.domain === 'Data Science Internship'
-                          ? 'border-orange-500 bg-orange-50/60 ring-2 ring-orange-500/20'
-                          : 'border-gray-200 hover:border-gray-300'
+                        ? 'border-orange-500 bg-orange-50/60 ring-2 ring-orange-500/20'
+                        : 'border-gray-200 hover:border-gray-300'
                         }`}
                     >
                       <input
