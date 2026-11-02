@@ -4,23 +4,14 @@ import {
   Briefcase,
   Code2,
   Database,
-  Calendar,
   IndianRupee,
   MapPin,
   Clock,
   CheckCircle2,
   ArrowRight,
-  ShieldCheck,
-  Send,
   HelpCircle,
   FileCheck,
-  Building2,
-  Sparkles,
-  Award,
-  Users,
-  Check,
-  Zap,
-  Cpu
+  Building2
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link, useLocation } from 'react-router-dom';
@@ -28,6 +19,7 @@ import { db } from '@/lib/firebase';
 import { collection, addDoc, Timestamp } from 'firebase/firestore';
 import toast from 'react-hot-toast';
 import InternshipApplicationModal from '@/components/InternshipApplicationModal';
+import InternshipLaptopExperience from '@/components/3d/laptop/InternshipLaptopExperience';
 
 export default function Internship() {
   const location = useLocation();
@@ -151,136 +143,127 @@ export default function Internship() {
   };
 
   return (
-    <div className="bg-slate-50 min-h-screen overflow-x-hidden">
-      {/* Top Banner / Hero with rich animated glow and no image */}
-      <div className="relative bg-gradient-to-b from-gray-950 via-slate-900 to-gray-950 text-white py-16 lg:py-24 overflow-hidden px-4 sm:px-6 lg:px-8">
-        {/* Subtle grid pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
-
-        {/* Ambient Animated Orbs */}
-        <motion.div
-          animate={{
-            x: [0, 40, -30, 0],
-            y: [0, -30, 20, 0],
-            scale: [1, 1.2, 1],
-          }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -top-16 -left-16 w-80 sm:w-96 h-80 sm:h-96 bg-amber-500/20 rounded-full blur-3xl pointer-events-none"
-        />
-        <motion.div
-          animate={{
-            x: [0, -40, 30, 0],
-            y: [0, 30, -30, 0],
-            scale: [1, 1.15, 1],
-          }}
-          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute -bottom-16 -right-16 w-80 sm:w-96 h-80 sm:h-96 bg-orange-600/20 rounded-full blur-3xl pointer-events-none"
-        />
+    <div className="bg-[#070a11] text-gray-100 min-h-screen overflow-x-hidden">
+      {/* Top Banner / Hero with Studio Depth and No Images */}
+      <div className="relative bg-gradient-to-b from-[#060910] via-[#0a0f1b] to-[#070a11] text-white py-16 lg:py-24 overflow-hidden px-4 sm:px-6 lg:px-8 border-b border-white/[0.06]">
+        {/* Architectural lighting subtle background */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 right-1/4 w-[500px] h-[350px] bg-amber-500/[0.04] rounded-full blur-[140px]" />
+          <div className="absolute bottom-0 left-1/4 w-[450px] h-[300px] bg-sky-900/[0.05] rounded-full blur-[130px]" />
+        </div>
 
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="max-w-3xl">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="inline-flex items-center space-x-2 bg-amber-500/15 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-semibold tracking-wide uppercase mb-4 border border-amber-400/30 text-amber-300"
-            >
-              <Briefcase className="w-4 h-4 text-amber-400" />
-              <span>ForeFight Era Official Internship Program</span>
-            </motion.div>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+            {/* LEFT HERO: Unchanged Official Heading, Description, and CTAs */}
+            <div className="lg:col-span-5 xl:col-span-5">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="inline-flex items-center space-x-2 bg-amber-500/15 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-mono font-semibold tracking-wide uppercase mb-4 border border-amber-400/30 text-amber-300"
+              >
+                <Briefcase className="w-4 h-4 text-amber-400" />
+                <span>ForeFight Era Official Internship Program</span>
+              </motion.div>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white mb-4 leading-tight"
-            >
-              Internship Opportunities at{' '}
-              <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-amber-200 bg-clip-text text-transparent">
-                ForeFight Era
-              </span>
-            </motion.h1>
+              <motion.h1
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="text-4xl sm:text-5xl lg:text-5xl xl:text-6xl font-black tracking-tight text-white mb-4 leading-tight"
+              >
+                Internship Opportunities at{' '}
+                <span className="bg-gradient-to-r from-amber-300 via-amber-400 to-orange-400 bg-clip-text text-transparent">
+                  ForeFight Era
+                </span>
+              </motion.h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-lg sm:text-xl font-medium text-amber-100/90 mb-6 leading-relaxed"
-            >
-              “Build practical skills, work on industry-oriented projects, and gain hands-on experience in technology and digital innovation.”
-            </motion.p>
+              <motion.p
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="text-lg sm:text-xl font-medium text-amber-200/90 mb-5 leading-relaxed"
+              >
+                “Build practical skills, work on industry-oriented projects, and gain hands-on experience in technology and digital innovation.”
+              </motion.p>
 
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="text-base text-gray-300 leading-relaxed mb-8"
-            >
-              ForeFight Era Pvt. Ltd. offers project-oriented internship opportunities designed to help students apply their academic knowledge to practical assignments and real-world technology projects. Interns may gain experience in web development, data science, software development, and related technology domains.
-            </motion.p>
+              <motion.p
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="text-base text-gray-300 leading-relaxed mb-8"
+              >
+                ForeFight Era Pvt. Ltd. offers project-oriented internship opportunities designed to help students apply their academic knowledge to practical assignments and real-world technology projects. Interns may gain experience in web development, data science, software development, and related technology domains.
+              </motion.p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="flex flex-wrap gap-4 pt-2"
-            >
-              <a href="#apply">
-                <Button size="lg" className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold shadow-lg shadow-orange-500/25 px-8">
-                  Apply for Internship
-                  <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
-              </a>
-              <a href="#details">
-                <Button size="lg" variant="outline" className="border-gray-700 hover:border-amber-400/50 bg-gray-900/60 text-gray-200 hover:text-white font-medium">
-                  View Program Tracks
-                </Button>
-              </a>
-            </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="flex flex-wrap gap-4 pt-1"
+              >
+                <a href="#apply">
+                  <Button size="lg" className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold shadow-lg shadow-orange-500/20 px-8 rounded-xl active:scale-[0.99]">
+                    Apply for Internship
+                    <ArrowRight className="ml-2 w-4 h-4" />
+                  </Button>
+                </a>
+                <a href="#details">
+                  <Button size="lg" variant="outline" className="border-white/10 hover:border-amber-400/50 bg-[#0c121e]/80 text-gray-200 hover:text-white font-semibold rounded-xl active:scale-[0.99]">
+                    View Program Tracks
+                  </Button>
+                </a>
+              </motion.div>
+            </div>
+
+            {/* RIGHT HERO: 3D Interactive Laptop Internship Classroom Experience */}
+            <div className="lg:col-span-7 xl:col-span-7 w-full flex items-center justify-center">
+              <InternshipLaptopExperience />
+            </div>
           </div>
         </div>
       </div>
 
       {/* Key Highlights Ribbon */}
-      <div className="bg-white border-b border-gray-200 py-6 shadow-sm">
+      <div className="bg-[#0b101a] border-b border-white/[0.08] py-6 shadow-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center shrink-0">
+            <div className="flex items-center space-x-3.5">
+              <div className="w-10 h-10 rounded-xl bg-orange-500/15 border border-orange-500/30 text-orange-400 flex items-center justify-center shrink-0">
                 <Clock className="w-5 h-5" />
               </div>
               <div>
-                <p className="text-[11px] uppercase tracking-wider text-gray-500 font-semibold">Duration</p>
-                <p className="text-base font-bold text-gray-900">3 Months</p>
+                <p className="text-[10px] font-mono uppercase tracking-wider text-gray-400 font-semibold">Duration</p>
+                <p className="text-base font-bold text-white">3 Months</p>
               </div>
             </div>
 
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-xl bg-green-100 text-green-600 flex items-center justify-center shrink-0">
+            <div className="flex items-center space-x-3.5">
+              <div className="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center justify-center shrink-0">
                 <IndianRupee className="w-5 h-5" />
               </div>
               <div>
-                <p className="text-[11px] uppercase tracking-wider text-gray-500 font-semibold">Monthly Stipend</p>
-                <p className="text-base font-bold text-gray-900">₹5,000 / month</p>
+                <p className="text-[10px] font-mono uppercase tracking-wider text-gray-400 font-semibold">Monthly Stipend</p>
+                <p className="text-base font-bold text-emerald-400">₹5,000 / month</p>
               </div>
             </div>
 
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+            <div className="flex items-center space-x-3.5">
+              <div className="w-10 h-10 rounded-xl bg-sky-500/15 border border-sky-500/30 text-sky-400 flex items-center justify-center shrink-0">
                 <MapPin className="w-5 h-5" />
               </div>
               <div>
-                <p className="text-[11px] uppercase tracking-wider text-gray-500 font-semibold">Working Mode</p>
-                <p className="text-base font-bold text-gray-900">Online / Offline / Hybrid</p>
+                <p className="text-[10px] font-mono uppercase tracking-wider text-gray-400 font-semibold">Working Mode</p>
+                <p className="text-base font-bold text-white">Online / Offline / Hybrid</p>
               </div>
             </div>
 
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+            <div className="flex items-center space-x-3.5">
+              <div className="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400 flex items-center justify-center shrink-0">
                 <FileCheck className="w-5 h-5" />
               </div>
               <div>
-                <p className="text-[11px] uppercase tracking-wider text-gray-500 font-semibold">Certification</p>
-                <p className="text-base font-bold text-gray-900">Verified Certificate</p>
+                <p className="text-[10px] font-mono uppercase tracking-wider text-gray-400 font-semibold">Certification</p>
+                <p className="text-base font-bold text-white">Verified Certificate</p>
               </div>
             </div>
           </div>
@@ -288,15 +271,15 @@ export default function Internship() {
       </div>
 
       {/* Main Internship Cards Section */}
-      <section id="details" className="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="details" className="py-16 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-14">
-          <span className="text-xs font-bold uppercase tracking-wider text-orange-600 bg-orange-100 px-3 py-1 rounded-full">
+          <span className="text-xs font-mono font-bold uppercase tracking-wider text-amber-300 bg-amber-500/10 border border-amber-400/30 px-3 py-1 rounded-full">
             Available Programs
           </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mt-3 mb-4">
+          <h2 className="text-3xl sm:text-5xl font-black text-white mt-3 mb-4 tracking-tight">
             Internship Opportunities at ForeFight Era
           </h2>
-          <p className="text-base sm:text-lg text-gray-600">
+          <p className="text-base sm:text-lg text-gray-400">
             Choose your specialization track. Each program is mentored by experienced tech leads and includes real project deliverables.
           </p>
         </div>
@@ -304,41 +287,43 @@ export default function Internship() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
           {/* Card 1: Web Development */}
           <motion.div
-            whileHover={{ y: -6 }}
-            transition={{ duration: 0.2 }}
-            className="bg-white rounded-2xl shadow-lg border border-amber-200/80 overflow-hidden flex flex-col justify-between"
+            whileHover={{ y: -4 }}
+            transition={{ duration: 0.25 }}
+            className="bg-[#0c121e] rounded-3xl border border-white/[0.08] hover:border-amber-400/40 shadow-2xl overflow-hidden flex flex-col justify-between"
           >
             <div>
-              <div className="bg-gradient-to-r from-orange-500 to-amber-600 p-6 text-white">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="bg-white/20 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">
+              <div className="p-6 sm:p-7 border-b border-white/[0.06] bg-[#0f1726]/60">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="bg-amber-500/15 border border-amber-400/30 text-amber-300 text-[11px] font-mono uppercase tracking-wider px-3 py-1 rounded-full font-semibold">
                     Software & Tech Track
                   </span>
-                  <Code2 className="w-8 h-8 text-amber-200" />
+                  <div className="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-400/20 text-amber-400 flex items-center justify-center">
+                    <Code2 className="w-5 h-5" />
+                  </div>
                 </div>
-                <h3 className="text-2xl font-bold">Web Development Internship</h3>
-                <p className="text-white/90 text-sm mt-1">
+                <h3 className="text-2xl font-bold text-white">Web Development Internship</h3>
+                <p className="text-gray-400 text-sm mt-1">
                   Full-stack engineering with modern JavaScript, React, Node.js, and cloud deployments.
                 </p>
               </div>
 
-              <div className="p-6 space-y-6">
+              <div className="p-6 sm:p-7 space-y-6">
                 <div>
-                  <h4 className="text-xs uppercase font-bold tracking-wider text-gray-500 mb-2">
+                  <h4 className="text-[11px] font-mono uppercase font-bold tracking-wider text-amber-400/90 mb-2">
                     Brief Description
                   </h4>
-                  <p className="text-sm text-gray-700 leading-relaxed">
+                  <p className="text-sm text-gray-300 leading-relaxed">
                     Interns will collaborate on the design and development of modern web applications, RESTful APIs, and responsive user interfaces. You will gain experience with production CI/CD workflows, database querying, component architecture, and Agile sprint planning.
                   </p>
                 </div>
 
                 <div>
-                  <h4 className="text-xs uppercase font-bold tracking-wider text-gray-500 mb-2">
+                  <h4 className="text-[11px] font-mono uppercase font-bold tracking-wider text-amber-400/90 mb-2.5">
                     Skills & Technologies Involved
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {['React.js', 'TypeScript', 'Node.js', 'REST APIs', 'Tailwind CSS', 'Git & GitHub', 'Express', 'Firebase / SQL'].map((sk) => (
-                      <span key={sk} className="text-xs bg-amber-50 text-amber-800 font-medium px-2.5 py-1 rounded-md border border-amber-200">
+                      <span key={sk} className="text-xs bg-[#111927] text-gray-200 font-medium px-2.5 py-1 rounded-lg border border-white/[0.08]">
                         {sk}
                       </span>
                     ))}
@@ -346,37 +331,37 @@ export default function Internship() {
                 </div>
 
                 <div>
-                  <h4 className="text-xs uppercase font-bold tracking-wider text-gray-500 mb-2">
+                  <h4 className="text-[11px] font-mono uppercase font-bold tracking-wider text-amber-400/90 mb-2">
                     Eligibility Criteria
                   </h4>
-                  <ul className="text-sm text-gray-700 space-y-1.5 list-disc list-inside">
+                  <ul className="text-sm text-gray-300 space-y-1.5 list-disc list-inside">
                     <li>B.Tech / B.E / BCA / MCA / B.Sc (Computer Science / IT / Related Branches) students or recent graduates.</li>
                     <li>Basic knowledge of HTML, CSS, JavaScript, and object-oriented programming concepts.</li>
                     <li>Commitment to complete hands-on weekly assignments and the final capstone project.</li>
                   </ul>
                 </div>
 
-                <div className="grid grid-cols-3 gap-3 bg-gray-50 p-3.5 rounded-xl border border-gray-200 text-center">
+                <div className="grid grid-cols-3 gap-3 bg-[#090e17] p-3.5 rounded-2xl border border-white/[0.06] text-center">
                   <div>
-                    <p className="text-[11px] uppercase font-bold text-gray-500">Duration</p>
-                    <p className="text-sm font-bold text-gray-900 mt-0.5">3 Months</p>
+                    <p className="text-[10px] font-mono uppercase text-gray-400">Duration</p>
+                    <p className="text-sm font-bold text-white mt-0.5">3 Months</p>
                   </div>
-                  <div className="border-x border-gray-200">
-                    <p className="text-[11px] uppercase font-bold text-gray-500">Stipend</p>
-                    <p className="text-sm font-bold text-green-700 mt-0.5">₹5,000 / mo</p>
+                  <div className="border-x border-white/[0.08]">
+                    <p className="text-[10px] font-mono uppercase text-gray-400">Stipend</p>
+                    <p className="text-sm font-bold text-emerald-400 mt-0.5">₹5,000 / mo</p>
                   </div>
                   <div>
-                    <p className="text-[11px] uppercase font-bold text-gray-500">Mode</p>
-                    <p className="text-sm font-bold text-gray-900 mt-0.5">Online / Hybrid</p>
+                    <p className="text-[10px] font-mono uppercase text-gray-400">Mode</p>
+                    <p className="text-sm font-bold text-white mt-0.5">Online / Hybrid</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="p-6 pt-0">
+            <div className="p-6 sm:p-7 pt-0">
               <Button
                 onClick={() => openApplyFor('Web Development Internship')}
-                className="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-semibold py-3 rounded-xl shadow-md"
+                className="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-orange-500/20 active:scale-[0.99]"
               >
                 Apply for Web Development
                 <ArrowRight className="ml-2 w-4 h-4" />
@@ -386,41 +371,43 @@ export default function Internship() {
 
           {/* Card 2: Data Science */}
           <motion.div
-            whileHover={{ y: -6 }}
-            transition={{ duration: 0.2 }}
-            className="bg-white rounded-2xl shadow-lg border border-amber-200/80 overflow-hidden flex flex-col justify-between"
+            whileHover={{ y: -4 }}
+            transition={{ duration: 0.25 }}
+            className="bg-[#0c121e] rounded-3xl border border-white/[0.08] hover:border-amber-400/40 shadow-2xl overflow-hidden flex flex-col justify-between"
           >
             <div>
-              <div className="bg-gradient-to-r from-amber-600 to-orange-600 p-6 text-white">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="bg-white/20 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">
+              <div className="p-6 sm:p-7 border-b border-white/[0.06] bg-[#0f1726]/60">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="bg-amber-500/15 border border-amber-400/30 text-amber-300 text-[11px] font-mono uppercase tracking-wider px-3 py-1 rounded-full font-semibold">
                     Analytics & AI Track
                   </span>
-                  <Database className="w-8 h-8 text-amber-200" />
+                  <div className="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-400/20 text-amber-400 flex items-center justify-center">
+                    <Database className="w-5 h-5" />
+                  </div>
                 </div>
-                <h3 className="text-2xl font-bold">Data Science Internship</h3>
-                <p className="text-white/90 text-sm mt-1">
+                <h3 className="text-2xl font-bold text-white">Data Science Internship</h3>
+                <p className="text-gray-400 text-sm mt-1">
                   Data processing, machine learning models, statistical analysis, and interactive business intelligence.
                 </p>
               </div>
 
-              <div className="p-6 space-y-6">
+              <div className="p-6 sm:p-7 space-y-6">
                 <div>
-                  <h4 className="text-xs uppercase font-bold tracking-wider text-gray-500 mb-2">
+                  <h4 className="text-[11px] font-mono uppercase font-bold tracking-wider text-amber-400/90 mb-2">
                     Brief Description
                   </h4>
-                  <p className="text-sm text-gray-700 leading-relaxed">
+                  <p className="text-sm text-gray-300 leading-relaxed">
                     Interns will perform exploratory data analysis on real datasets, clean and preprocess raw information, train predictive models, and build interactive dashboards to communicate technical insights to stakeholders.
                   </p>
                 </div>
 
                 <div>
-                  <h4 className="text-xs uppercase font-bold tracking-wider text-gray-500 mb-2">
+                  <h4 className="text-[11px] font-mono uppercase font-bold tracking-wider text-amber-400/90 mb-2.5">
                     Skills & Technologies Involved
                   </h4>
                   <div className="flex flex-wrap gap-2">
                     {['Python', 'Pandas & NumPy', 'SQL', 'Scikit-Learn', 'Matplotlib / Seaborn', 'Data Analytics', 'Model Evaluation', 'Power BI / Dashboarding'].map((sk) => (
-                      <span key={sk} className="text-xs bg-amber-50 text-amber-800 font-medium px-2.5 py-1 rounded-md border border-amber-200">
+                      <span key={sk} className="text-xs bg-[#111927] text-gray-200 font-medium px-2.5 py-1 rounded-lg border border-white/[0.08]">
                         {sk}
                       </span>
                     ))}
@@ -428,37 +415,37 @@ export default function Internship() {
                 </div>
 
                 <div>
-                  <h4 className="text-xs uppercase font-bold tracking-wider text-gray-500 mb-2">
+                  <h4 className="text-[11px] font-mono uppercase font-bold tracking-wider text-amber-400/90 mb-2">
                     Eligibility Criteria
                   </h4>
-                  <ul className="text-sm text-gray-700 space-y-1.5 list-disc list-inside">
+                  <ul className="text-sm text-gray-300 space-y-1.5 list-disc list-inside">
                     <li>B.Tech / B.E / BCA / MCA / M.Tech / B.Sc (CS, IT, Data Science, Math, Stats) students or graduates.</li>
                     <li>Basic knowledge of Python scripting, database queries (SQL), and foundational math/statistics.</li>
                     <li>Eagerness to analyze datasets and present data-backed problem-solving solutions.</li>
                   </ul>
                 </div>
 
-                <div className="grid grid-cols-3 gap-3 bg-gray-50 p-3.5 rounded-xl border border-gray-200 text-center">
+                <div className="grid grid-cols-3 gap-3 bg-[#090e17] p-3.5 rounded-2xl border border-white/[0.06] text-center">
                   <div>
-                    <p className="text-[11px] uppercase font-bold text-gray-500">Duration</p>
-                    <p className="text-sm font-bold text-gray-900 mt-0.5">3 Months</p>
+                    <p className="text-[10px] font-mono uppercase text-gray-400">Duration</p>
+                    <p className="text-sm font-bold text-white mt-0.5">3 Months</p>
                   </div>
-                  <div className="border-x border-gray-200">
-                    <p className="text-[11px] uppercase font-bold text-gray-500">Stipend</p>
-                    <p className="text-sm font-bold text-green-700 mt-0.5">₹5,000 / mo</p>
+                  <div className="border-x border-white/[0.08]">
+                    <p className="text-[10px] font-mono uppercase text-gray-400">Stipend</p>
+                    <p className="text-sm font-bold text-emerald-400 mt-0.5">₹5,000 / mo</p>
                   </div>
                   <div>
-                    <p className="text-[11px] uppercase font-bold text-gray-500">Mode</p>
-                    <p className="text-sm font-bold text-gray-900 mt-0.5">Online / Hybrid</p>
+                    <p className="text-[10px] font-mono uppercase text-gray-400">Mode</p>
+                    <p className="text-sm font-bold text-white mt-0.5">Online / Hybrid</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="p-6 pt-0">
+            <div className="p-6 sm:p-7 pt-0">
               <Button
                 onClick={() => openApplyFor('Data Science Internship')}
-                className="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-semibold py-3 rounded-xl shadow-md"
+                className="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-orange-500/20 active:scale-[0.99]"
               >
                 Apply for Data Science
                 <ArrowRight className="ml-2 w-4 h-4" />
@@ -468,51 +455,51 @@ export default function Internship() {
         </div>
 
         {/* Learning Roadmap / Milestone Structure */}
-        <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-6 sm:p-8 mb-16">
+        <div className="bg-[#0c121e] rounded-3xl shadow-xl border border-white/[0.08] p-6 sm:p-8 mb-16">
           <div className="max-w-3xl mb-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">Structured 3-Month Internship Roadmap</h3>
-            <p className="text-gray-600 text-sm">
+            <h3 className="text-2xl font-bold text-white mb-2">Structured 3-Month Internship Roadmap</h3>
+            <p className="text-gray-400 text-sm">
               Our internship program follows a defined milestone structure designed to build industry readiness in accordance with technical education frameworks.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="p-5 rounded-xl bg-orange-50/70 border border-orange-200">
-              <span className="text-xs font-bold uppercase tracking-wider text-orange-700 bg-orange-200/60 px-2 py-0.5 rounded">
+            <div className="p-5 rounded-2xl bg-[#090e17] border border-white/[0.08]">
+              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-amber-300 bg-amber-500/15 border border-amber-400/30 px-2 py-0.5 rounded">
                 Month 1 (Weeks 1-4)
               </span>
-              <h4 className="font-bold text-gray-900 mt-3 mb-1">Foundations & Tooling</h4>
-              <p className="text-xs text-gray-600 leading-relaxed">
+              <h4 className="font-bold text-white mt-3 mb-1">Foundations & Tooling</h4>
+              <p className="text-xs text-gray-400 leading-relaxed">
                 Development environment setup, Git best practices, architectural paradigms, code standards, and guided technical assignments.
               </p>
             </div>
 
-            <div className="p-5 rounded-xl bg-amber-50/70 border border-amber-200">
-              <span className="text-xs font-bold uppercase tracking-wider text-amber-700 bg-amber-200/60 px-2 py-0.5 rounded">
+            <div className="p-5 rounded-2xl bg-[#090e17] border border-white/[0.08]">
+              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-amber-300 bg-amber-500/15 border border-amber-400/30 px-2 py-0.5 rounded">
                 Month 2 (Weeks 5-8)
               </span>
-              <h4 className="font-bold text-gray-900 mt-3 mb-1">Project Architecture</h4>
-              <p className="text-xs text-gray-600 leading-relaxed">
+              <h4 className="font-bold text-white mt-3 mb-1">Project Architecture</h4>
+              <p className="text-xs text-gray-400 leading-relaxed">
                 Sprint planning, database modeling, REST API integrations, and core feature implementation under mentor supervision.
               </p>
             </div>
 
-            <div className="p-5 rounded-xl bg-yellow-50/70 border border-yellow-200">
-              <span className="text-xs font-bold uppercase tracking-wider text-yellow-700 bg-yellow-200/60 px-2 py-0.5 rounded">
+            <div className="p-5 rounded-2xl bg-[#090e17] border border-white/[0.08]">
+              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-amber-300 bg-amber-500/15 border border-amber-400/30 px-2 py-0.5 rounded">
                 Month 3 (Weeks 9-11)
               </span>
-              <h4 className="font-bold text-gray-900 mt-3 mb-1">Live Capstone Build</h4>
-              <p className="text-xs text-gray-600 leading-relaxed">
+              <h4 className="font-bold text-white mt-3 mb-1">Live Capstone Build</h4>
+              <p className="text-xs text-gray-400 leading-relaxed">
                 End-to-end project execution, unit testing, performance optimization, and production deployment.
               </p>
             </div>
 
-            <div className="p-5 rounded-xl bg-green-50/70 border border-green-200">
-              <span className="text-xs font-bold uppercase tracking-wider text-green-700 bg-green-200/60 px-2 py-0.5 rounded">
+            <div className="p-5 rounded-2xl bg-[#090e17] border border-white/[0.08]">
+              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-emerald-300 bg-emerald-500/15 border border-emerald-400/30 px-2 py-0.5 rounded">
                 Week 12
               </span>
-              <h4 className="font-bold text-gray-900 mt-3 mb-1">Evaluation & Credit Letter</h4>
-              <p className="text-xs text-gray-600 leading-relaxed">
+              <h4 className="font-bold text-white mt-3 mb-1">Evaluation & Credit Letter</h4>
+              <p className="text-xs text-gray-400 leading-relaxed">
                 Code review, project viva presentation, issuance of Internship Certificate and Academic Credit Recommendation letter.
               </p>
             </div>
@@ -520,12 +507,12 @@ export default function Internship() {
         </div>
 
         {/* Embedded Functional Application Form */}
-        <div id="apply" className="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden mb-16 scroll-mt-24">
+        <div id="apply" className="bg-[#0c121e] rounded-3xl shadow-2xl border border-white/[0.08] overflow-hidden mb-16 scroll-mt-24">
           <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 p-6 sm:p-8 text-white">
-            <span className="bg-white/20 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">
+            <span className="bg-white/20 text-xs font-mono font-semibold px-3 py-1 rounded-full uppercase tracking-wider">
               Direct Application Form
             </span>
-            <h3 className="text-2xl sm:text-3xl font-extrabold mt-2">Submit Your Internship Application</h3>
+            <h3 className="text-2xl sm:text-3xl font-extrabold mt-2 tracking-tight">Submit Your Internship Application</h3>
             <p className="text-white/90 text-sm mt-1 max-w-2xl">
               Apply directly to ForeFight Era Pvt. Ltd. Fill out the details below. Our technical panel will review your credentials and contact you with next steps.
             </p>
@@ -534,17 +521,17 @@ export default function Internship() {
           <div className="p-6 sm:p-8">
             {submittedRefId ? (
               <div className="text-center py-10 space-y-4">
-                <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto">
+                <div className="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto border border-emerald-400/30">
                   <CheckCircle2 className="w-10 h-10" />
                 </div>
-                <h4 className="text-2xl font-bold text-gray-900">Application Successfully Submitted!</h4>
-                <p className="text-gray-600 max-w-md mx-auto text-sm">
+                <h4 className="text-2xl font-bold text-white">Application Successfully Submitted!</h4>
+                <p className="text-gray-400 max-w-md mx-auto text-sm">
                   We have logged your application into ForeFight Era’s review database.
                 </p>
-                <div className="bg-amber-50 border border-amber-200 rounded-xl p-5 max-w-md mx-auto">
-                  <p className="text-xs uppercase font-bold text-amber-800">Your Reference ID</p>
-                  <p className="text-2xl font-mono font-bold text-amber-900 mt-1">{submittedRefId}</p>
-                  <p className="text-xs text-amber-700 mt-2">
+                <div className="bg-[#090e17] border border-amber-400/30 rounded-2xl p-5 max-w-md mx-auto">
+                  <p className="text-xs font-mono uppercase font-bold text-amber-300">Your Reference ID</p>
+                  <p className="text-2xl font-mono font-bold text-white mt-1">{submittedRefId}</p>
+                  <p className="text-xs text-gray-400 mt-2">
                     Confirmation has been queued for {formData.email}. We will contact you regarding interview scheduling.
                   </p>
                 </div>
@@ -566,7 +553,7 @@ export default function Internship() {
                     });
                   }}
                   variant="outline"
-                  className="mt-4"
+                  className="mt-4 border-white/10 text-gray-200 hover:text-white hover:bg-white/5"
                 >
                   Submit Another Application
                 </Button>
@@ -575,14 +562,14 @@ export default function Internship() {
               <form onSubmit={handleFormSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
-                      Internship Domain <span className="text-red-500">*</span>
+                    <label className="block text-xs font-mono font-bold uppercase tracking-wider text-amber-400/90 mb-2">
+                      Internship Domain <span className="text-amber-500">*</span>
                     </label>
                     <select
                       name="domain"
                       value={formData.domain}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm bg-white"
+                      className="w-full px-4 py-2.5 rounded-xl border border-white/10 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm bg-[#111827] text-white"
                     >
                       <option value="Web Development Internship">Web Development Internship</option>
                       <option value="Data Science Internship">Data Science Internship</option>
@@ -590,14 +577,14 @@ export default function Internship() {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
-                      Internship Mode <span className="text-red-500">*</span>
+                    <label className="block text-xs font-mono font-bold uppercase tracking-wider text-amber-400/90 mb-2">
+                      Internship Mode <span className="text-amber-500">*</span>
                     </label>
                     <select
                       name="mode"
                       value={formData.mode}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm bg-white"
+                      className="w-full px-4 py-2.5 rounded-xl border border-white/10 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm bg-[#111827] text-white"
                     >
                       <option value="Hybrid">Hybrid (Remote + Periodic Review)</option>
                       <option value="Online">Online / Fully Remote</option>
@@ -608,8 +595,8 @@ export default function Internship() {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
-                      Full Name <span className="text-red-500">*</span>
+                    <label className="block text-xs font-mono font-bold uppercase tracking-wider text-gray-300 mb-2">
+                      Full Name <span className="text-amber-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -618,13 +605,13 @@ export default function Internship() {
                       onChange={handleInputChange}
                       placeholder="Your full name"
                       required
-                      className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm"
+                      className="w-full px-4 py-2.5 rounded-xl border border-white/10 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm bg-[#111827] text-white placeholder-gray-500"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
-                      Email Address <span className="text-red-500">*</span>
+                    <label className="block text-xs font-mono font-bold uppercase tracking-wider text-gray-300 mb-2">
+                      Email Address <span className="text-amber-500">*</span>
                     </label>
                     <input
                       type="email"
@@ -633,13 +620,13 @@ export default function Internship() {
                       onChange={handleInputChange}
                       placeholder="student@college.edu"
                       required
-                      className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm"
+                      className="w-full px-4 py-2.5 rounded-xl border border-white/10 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm bg-[#111827] text-white placeholder-gray-500"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
-                      Phone Number <span className="text-red-500">*</span>
+                    <label className="block text-xs font-mono font-bold uppercase tracking-wider text-gray-300 mb-2">
+                      Phone Number <span className="text-amber-500">*</span>
                     </label>
                     <input
                       type="tel"
@@ -648,15 +635,15 @@ export default function Internship() {
                       onChange={handleInputChange}
                       placeholder="10-digit mobile number"
                       required
-                      className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm"
+                      className="w-full px-4 py-2.5 rounded-xl border border-white/10 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm bg-[#111827] text-white placeholder-gray-500"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
-                      College / University Name <span className="text-red-500">*</span>
+                    <label className="block text-xs font-mono font-bold uppercase tracking-wider text-gray-300 mb-2">
+                      College / University Name <span className="text-amber-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -665,13 +652,13 @@ export default function Internship() {
                       onChange={handleInputChange}
                       placeholder="e.g. Jawaharlal Nehru Technological University"
                       required
-                      className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm"
+                      className="w-full px-4 py-2.5 rounded-xl border border-white/10 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm bg-[#111827] text-white placeholder-gray-500"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
-                      Degree, Branch & Current Year <span className="text-red-500">*</span>
+                    <label className="block text-xs font-mono font-bold uppercase tracking-wider text-gray-300 mb-2">
+                      Degree, Branch & Current Year <span className="text-amber-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -680,15 +667,15 @@ export default function Internship() {
                       onChange={handleInputChange}
                       placeholder="e.g. B.Tech Computer Science - 3rd Year"
                       required
-                      className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm"
+                      className="w-full px-4 py-2.5 rounded-xl border border-white/10 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm bg-[#111827] text-white placeholder-gray-500"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
-                      Technical Skills / Tool Knowledge <span className="text-red-500">*</span>
+                    <label className="block text-xs font-mono font-bold uppercase tracking-wider text-gray-300 mb-2">
+                      Technical Skills / Tool Knowledge <span className="text-amber-500">*</span>
                     </label>
                     <input
                       type="text"
@@ -697,13 +684,13 @@ export default function Internship() {
                       onChange={handleInputChange}
                       placeholder="e.g. HTML, CSS, JavaScript, React, Python, Git"
                       required
-                      className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm"
+                      className="w-full px-4 py-2.5 rounded-xl border border-white/10 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm bg-[#111827] text-white placeholder-gray-500"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
-                      Resume Link (Google Drive / GitHub / LinkedIn) <span className="text-red-500">*</span>
+                    <label className="block text-xs font-mono font-bold uppercase tracking-wider text-gray-300 mb-2">
+                      Resume Link (Google Drive / GitHub / LinkedIn) <span className="text-amber-500">*</span>
                     </label>
                     <input
                       type="url"
@@ -712,13 +699,13 @@ export default function Internship() {
                       onChange={handleInputChange}
                       placeholder="https://drive.google.com/... or https://linkedin.com/in/..."
                       required
-                      className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm"
+                      className="w-full px-4 py-2.5 rounded-xl border border-white/10 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm bg-[#111827] text-white placeholder-gray-500"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold uppercase tracking-wider text-gray-700 mb-1.5">
+                  <label className="block text-xs font-mono font-bold uppercase tracking-wider text-gray-300 mb-2">
                     Brief Statement of Interest (Optional)
                   </label>
                   <textarea
@@ -727,18 +714,18 @@ export default function Internship() {
                     onChange={handleInputChange}
                     rows={3}
                     placeholder="Briefly explain your career goals or any relevant projects..."
-                    className="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-sm"
+                    className="w-full px-4 py-2.5 rounded-xl border border-white/10 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 text-sm bg-[#111827] text-white placeholder-gray-500"
                   />
                 </div>
 
-                <div className="bg-amber-50 rounded-xl p-4 border border-amber-200 text-xs text-amber-900 space-y-1">
-                  <p className="font-bold">Privacy Notice & Verification Assurance:</p>
+                <div className="bg-[#090e17] rounded-2xl p-4 border border-amber-400/20 text-xs text-amber-200/90 space-y-1">
+                  <p className="font-bold text-amber-300">Privacy Notice & Verification Assurance:</p>
                   <p>
                     ForeFight Era Pvt. Ltd. collects this information solely for evaluating internship candidates and verifying academic enrollment. We do not sell or share your personal details with third-party marketers.
                   </p>
                 </div>
 
-                <div className="flex items-start space-x-2">
+                <div className="flex items-start space-x-2.5">
                   <input
                     type="checkbox"
                     id="pageAgreeTerms"
@@ -746,9 +733,9 @@ export default function Internship() {
                     checked={formData.agreeTerms}
                     onChange={handleInputChange}
                     required
-                    className="mt-1 h-4 w-4 text-orange-600 focus:ring-orange-500 rounded border-gray-300"
+                    className="mt-1 h-4 w-4 text-orange-500 focus:ring-orange-400 rounded border-gray-600 bg-gray-800"
                   />
-                  <label htmlFor="pageAgreeTerms" className="text-xs text-gray-700 leading-normal">
+                  <label htmlFor="pageAgreeTerms" className="text-xs text-gray-300 leading-normal">
                     I confirm that the details submitted are true and accurate, and I authorize ForeFight Era Pvt. Ltd. to contact me regarding my internship application.
                   </label>
                 </div>
@@ -758,7 +745,7 @@ export default function Internship() {
                     type="submit"
                     disabled={loading}
                     size="lg"
-                    className="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold px-10 shadow-lg"
+                    className="w-full sm:w-auto bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold px-10 rounded-xl shadow-lg shadow-orange-500/20 active:scale-[0.99]"
                   >
                     {loading ? 'Submitting Application...' : 'Submit Application Now'}
                   </Button>
@@ -769,45 +756,45 @@ export default function Internship() {
         </div>
 
         {/* FAQ Section */}
-        <div className="bg-white rounded-2xl shadow-md border border-gray-200 p-6 sm:p-8 mb-16">
+        <div className="bg-[#0c121e] rounded-3xl shadow-xl border border-white/[0.08] p-6 sm:p-8 mb-16">
           <div className="flex items-center space-x-3 mb-6">
-            <HelpCircle className="w-7 h-7 text-orange-600" />
-            <h3 className="text-2xl font-bold text-gray-900">Frequently Asked Questions</h3>
+            <HelpCircle className="w-6 h-6 text-amber-400" />
+            <h3 className="text-2xl font-bold text-white">Frequently Asked Questions</h3>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-700">
-            <div className="p-4 rounded-xl bg-gray-50 border border-gray-200">
-              <h4 className="font-bold text-gray-900 mb-1">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-300">
+            <div className="p-5 rounded-2xl bg-[#090e17] border border-white/[0.06]">
+              <h4 className="font-bold text-white mb-1.5">
                 Is this internship eligible for university credits and academic submission?
               </h4>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-gray-400 text-xs leading-relaxed">
                 Yes. Upon successful completion, ForeFight Era Pvt. Ltd. issues an official Certificate of Internship Completion, Project Performance Evaluation, and Academic Credit Letter specifying the duration (3 months) and technology domain.
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-gray-50 border border-gray-200">
-              <h4 className="font-bold text-gray-900 mb-1">
+            <div className="p-5 rounded-2xl bg-[#090e17] border border-white/[0.06]">
+              <h4 className="font-bold text-white mb-1.5">
                 What is the stipend and payment disbursement schedule?
               </h4>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-gray-400 text-xs leading-relaxed">
                 Eligible selected interns receive a stipend of ₹5,000 per month, disbursed on a monthly basis based on project milestone completion and active participation.
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-gray-50 border border-gray-200">
-              <h4 className="font-bold text-gray-900 mb-1">
+            <div className="p-5 rounded-2xl bg-[#090e17] border border-white/[0.06]">
+              <h4 className="font-bold text-white mb-1.5">
                 Can I attend classes while completing the internship?
               </h4>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-gray-400 text-xs leading-relaxed">
                 Yes. Our internship modes (Online / Hybrid) are structured with flexible schedules specifically accommodating college lecture timetables and examinations.
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-gray-50 border border-gray-200">
-              <h4 className="font-bold text-gray-900 mb-1">
+            <div className="p-5 rounded-2xl bg-[#090e17] border border-white/[0.06]">
+              <h4 className="font-bold text-white mb-1.5">
                 What is the screening and selection procedure?
               </h4>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-gray-400 text-xs leading-relaxed">
                 Applications submitted via this portal are screened based on technical skills and academic background, followed by a brief technical assessment or interview before selection offers are issued.
               </p>
             </div>
@@ -815,29 +802,29 @@ export default function Internship() {
         </div>
 
         {/* Contact and Corporate Verification Info */}
-        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="bg-[#0c121e] border border-white/[0.08] rounded-3xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
           <div>
-            <div className="flex items-center space-x-2 text-xs font-bold uppercase tracking-wider text-amber-800 mb-1">
-              <Building2 className="w-4 h-4 text-amber-600" />
+            <div className="flex items-center space-x-2 text-xs font-mono font-bold uppercase tracking-wider text-amber-300 mb-1">
+              <Building2 className="w-4 h-4 text-amber-400" />
               <span>Official Corporate Entity</span>
             </div>
-            <h4 className="text-xl font-bold text-gray-900">ForeFight Era Private Limited</h4>
-            <p className="text-sm text-gray-600 mt-1 max-w-xl">
-              MCA Registered • MSME Recognized • DPIIT Approved • Domain: <a href="https://www.forefightedu.com/" className="text-orange-600 underline font-medium">www.forefightedu.com</a>
+            <h4 className="text-xl font-bold text-white">ForeFight Era Private Limited</h4>
+            <p className="text-sm text-gray-400 mt-1 max-w-xl">
+              MCA Registered • MSME Recognized • DPIIT Approved • Domain: <a href="https://www.forefightedu.com/" className="text-amber-400 underline font-medium">www.forefightedu.com</a>
             </p>
-            <p className="text-xs text-gray-500 mt-2">
-              For institutional partnerships or verification queries: <span className="font-semibold text-gray-800">forefightera@gmail.com</span> | <span className="font-semibold text-gray-800">+91 8919403905</span>
+            <p className="text-xs text-gray-400 mt-2">
+              For institutional partnerships or verification queries: <span className="font-mono text-gray-200">forefightera@gmail.com</span> | <span className="font-mono text-gray-200">+91 8919403905</span>
             </p>
           </div>
 
           <div className="shrink-0 flex flex-wrap gap-3">
             <a href="#apply">
-              <Button className="bg-orange-600 hover:bg-orange-700 text-white font-semibold">
+              <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold rounded-xl shadow-md">
                 Apply for Internship
               </Button>
             </a>
             <Link to="/about">
-              <Button variant="outline" className="border-orange-300 text-orange-700 hover:bg-orange-100">
+              <Button variant="outline" className="border-white/10 text-gray-200 hover:text-white hover:bg-white/5 rounded-xl">
                 About Company
               </Button>
             </Link>

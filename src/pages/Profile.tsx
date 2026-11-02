@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { User, Mail, Phone, Calendar, BookOpen, Award, Clock, WifiOff, Link, Save } from 'lucide-react';
+import { User, Mail, Phone, Calendar, BookOpen, Award, Clock, WifiOff, Link as LinkIcon, Save, Edit3, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { auth, db, storage } from '@/lib/firebase';
+import { auth, db } from '@/lib/firebase';
 import { doc, getDoc, getDocs, collection, query, where, updateDoc } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
@@ -24,14 +22,6 @@ interface UserData {
   role: string;
   createdAt: string;
   profilePhoto?: string;
-}
-
-interface Enrollment {
-  enrollmentId: string;
-  userId: string;
-  programId: string;
-  progress: number;
-  enrolledAt: string;
 }
 
 export default function Profile() {
@@ -64,67 +54,52 @@ export default function Profile() {
       try {
         const currentUser = auth.currentUser;
         if (!currentUser) {
-          navigate('/');
+          navigate('/login');
           return;
         }
 
-        setError(null);
         const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
-        
-        if (!userDoc.exists()) {
-          setError('User profile not found');
-          return;
+        if (userDoc.exists()) {
+          const userData = {
+            id: userDoc.id,
+            ...userDoc.data()
+          } as UserData;
+          setUser(userData);
+          setEditedUser(userData);
+        } else {
+          setError('User not found');
         }
 
-        const userData = userDoc.data() as UserData;
-        setUser({ ...userData, id: userDoc.id });
-
-        // Fetch enrolled courses
         const enrollmentsRef = collection(db, 'enrollments');
         const q = query(enrollmentsRef, where('userId', '==', currentUser.uid));
         const enrollmentsSnapshot = await getDocs(q);
-        
-        const enrollmentData = enrollmentsSnapshot.docs.map(doc => {
-          const data = doc.data();
-          return {
-            enrollmentId: doc.id,
-            userId: data.userId,
-            programId: data.programId,
-            progress: data.progress || 0,
-            enrolledAt: data.enrolledAt || new Date().toISOString()
-          } as Enrollment;
-        });
 
-        // Fetch course details for each enrollment
-        const coursePromises = enrollmentData.map(async (enrollment) => {
-          try {
-            const courseDoc = await getDoc(doc(db, 'programs', enrollment.programId));
-            if (!courseDoc.exists()) {
-              console.warn(`Course ${enrollment.programId} not found`);
-              return null;
+        const enrolledCoursesData = await Promise.all(
+          enrollmentsSnapshot.docs.map(async (enrollmentDoc) => {
+            const enrollmentData = enrollmentDoc.data();
+            const programDoc = await getDoc(doc(db, 'programs', enrollmentData.programId));
+
+            if (programDoc.exists()) {
+              return {
+                id: programDoc.id,
+                title: programDoc.data().title,
+                progress: enrollmentData.progress || 0,
+                enrolledAt: enrollmentData.enrolledAt,
+                enrollmentId: enrollmentDoc.id
+              };
             }
-            return {
-              id: courseDoc.id,
-              title: courseDoc.data().title,
-              progress: enrollment.progress,
-              enrolledAt: enrollment.enrolledAt,
-              enrollmentId: enrollment.enrollmentId
-            };
-          } catch (err) {
-            console.error(`Error fetching course ${enrollment.programId}:`, err);
             return null;
-          }
-        });
+          })
+        );
 
-        const enrolledCoursesData = (await Promise.all(coursePromises))
-          .filter((course): course is Course => course !== null);
-        
-        setEnrolledCourses(enrolledCoursesData);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
+        setEnrolledCourses(
+          enrolledCoursesData.filter((course): course is Course => course !== null)
+        );
+      } catch (err) {
+        console.error('Error fetching user data:', err);
         setError('Failed to load profile data');
         if (!isOffline) {
-          toast.error('Failed to load profile data. Please try again.');
+          toast.error('Failed to load profile data');
         }
       } finally {
         setLoading(false);
@@ -134,41 +109,24 @@ export default function Profile() {
     fetchUserData();
   }, [navigate, isOffline]);
 
-  const container = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
-
-  const item = {
-    hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 }
-  };
-
   const handlePhotoUrlSave = async () => {
-    if (!photoUrl) return;
+    if (!photoUrl.trim()) return;
 
     try {
       const currentUser = auth.currentUser;
       if (!currentUser) return;
 
-      // Update user document with new photo URL
       const userRef = doc(db, 'users', currentUser.uid);
-      await updateDoc(userRef, { profilePhoto: photoUrl });
-      
-      // Update local state
-      setUser(prev => prev ? { ...prev, profilePhoto: photoUrl } : null);
-      setEditedUser(prev => prev ? { ...prev, profilePhoto: photoUrl } : null);
+      await updateDoc(userRef, { profilePhoto: photoUrl.trim() });
+
+      setUser(prev => prev ? { ...prev, profilePhoto: photoUrl.trim() } : null);
+      setEditedUser(prev => prev ? { ...prev, profilePhoto: photoUrl.trim() } : null);
       setShowPhotoInput(false);
       setPhotoUrl('');
-      
-      toast.success('Profile photo updated successfully!');
-    } catch (error) {
-      console.error('Error updating photo URL:', error);
+
+      toast.success('Profile photo updated!');
+    } catch (err) {
+      console.error('Error updating photo URL:', err);
       toast.error('Failed to update profile photo');
     }
   };
@@ -189,301 +147,303 @@ export default function Profile() {
       setUser(editedUser);
       setIsEditing(false);
       toast.success('Profile updated successfully!');
-    } catch (error) {
-      console.error('Error updating profile:', error);
+    } catch (err) {
+      console.error('Error updating profile:', err);
       toast.error('Failed to update profile');
     }
   };
 
-  const startEditing = () => {
-    setEditedUser(user);
-    setIsEditing(true);
-  };
-
-  const cancelEditing = () => {
-    setEditedUser(null);
-    setIsEditing(false);
-  };
-
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      <div className="flex items-center justify-center min-h-screen bg-[#070a11]">
+        <div className="w-10 h-10 border-2 border-amber-400 border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
-  if (!user) {
+  if (error || !user) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold mb-4">User not found</h2>
-          <Button onClick={() => navigate('/')}>Return Home</Button>
+      <div className="min-h-screen flex items-center justify-center bg-[#070a11] px-4">
+        <div className="text-center p-8 bg-[#0c121e] rounded-3xl border border-white/10 max-w-md w-full">
+          <p className="text-red-400 mb-4">{error || 'User not found'}</p>
+          <Button onClick={() => navigate('/login')} className="bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl">
+            Go to Login
+          </Button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="py-12">
+    <div className="py-12 bg-[#070a11] text-gray-100 min-h-screen">
       {isOffline && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8">
-          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4">
-            <div className="flex items-center">
-              <WifiOff className="h-5 w-5 text-yellow-400 mr-2" />
-              <p className="text-sm text-yellow-700">
-                You are currently offline. Some features may be limited.
-              </p>
-            </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
+          <div className="bg-amber-500/10 border border-amber-400/30 rounded-2xl p-4 flex items-center space-x-2.5 text-amber-300 text-xs font-mono">
+            <WifiOff className="h-4 w-4 shrink-0" />
+            <span>You are currently offline. Cached data is displayed.</span>
           </div>
         </div>
       )}
-      
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          variants={container}
-          initial="hidden"
-          animate="show"
-        >
-          {/* Profile Header */}
-          <motion.div
-            variants={item}
-            className="bg-white rounded-xl shadow-lg overflow-hidden mb-8"
-          >
-            <div className="relative h-48 bg-gradient-to-r from-indigo-500 to-purple-600">
-              <div className="absolute -bottom-12 left-8">
-                <div className="relative w-24 h-24 bg-white rounded-full flex items-center justify-center border-4 border-white shadow-lg overflow-hidden">
-                  {user.profilePhoto ? (
-                    <img 
-                      src={user.profilePhoto} 
-                      alt={user.fullName}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <User className="w-12 h-12 text-gray-600" />
-                  )}
-                  <button 
-                    onClick={() => setShowPhotoInput(true)}
-                    className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center cursor-pointer opacity-0 hover:opacity-100 transition-opacity"
-                  >
-                    <Link className="w-6 h-6 text-white" />
-                  </button>
-                </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        {/* Profile Banner Card */}
+        <div className="bg-[#0c121e] rounded-3xl border border-white/10 shadow-2xl overflow-hidden relative">
+          <div className="h-44 sm:h-52 bg-gradient-to-r from-amber-500/20 via-orange-600/30 to-[#070a11] relative border-b border-white/5">
+            <div className="absolute top-4 right-4">
+              <span className="px-3 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-black/60 border border-white/10 text-amber-300">
+                {user.role}
+              </span>
+            </div>
+            {/* Avatar */}
+            <div className="absolute -bottom-12 left-6 sm:left-8">
+              <div className="relative w-24 h-24 sm:w-28 sm:h-28 bg-[#111827] rounded-3xl flex items-center justify-center border-4 border-[#0c121e] shadow-2xl overflow-hidden group">
+                {user.profilePhoto ? (
+                  <img src={user.profilePhoto} alt={user.fullName} className="w-full h-full object-cover" />
+                ) : (
+                  <User className="w-12 h-12 text-gray-400" />
+                )}
+                <button
+                  onClick={() => setShowPhotoInput(true)}
+                  className="absolute inset-0 bg-black/70 flex items-center justify-center cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity"
+                  title="Update photo"
+                >
+                  <LinkIcon className="w-5 h-5 text-amber-400" />
+                </button>
               </div>
             </div>
-            <div className="pt-16 pb-8 px-8">
+          </div>
+
+          <div className="pt-16 pb-7 px-6 sm:px-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
               {isEditing ? (
-                <div className="space-y-4">
+                <div className="space-y-2">
                   <input
                     type="text"
                     value={editedUser?.fullName || ''}
                     onChange={(e) => setEditedUser(prev => prev ? { ...prev, fullName: e.target.value } : null)}
-                    className="text-3xl font-bold w-full p-2 border rounded"
+                    className="text-2xl font-black w-full p-2 bg-[#111827] border border-white/10 rounded-xl text-white focus:outline-none focus:border-amber-400"
                   />
-                  <p className="text-gray-600">{user.role}</p>
+                  <p className="text-xs font-mono text-gray-400 uppercase tracking-wider">{user.role}</p>
                 </div>
               ) : (
                 <>
-                  <h1 className="text-3xl font-bold mb-2">{user.fullName}</h1>
-                  <p className="text-gray-600">{user.role}</p>
+                  <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">{user.fullName}</h1>
+                  <p className="text-xs font-mono text-amber-400 uppercase tracking-wider mt-0.5">
+                    ForeFight Era Verified Student
+                  </p>
                 </>
               )}
             </div>
-          </motion.div>
 
-          {/* Photo URL Input Modal */}
-          {showPhotoInput && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white rounded-lg p-6 w-full max-w-md">
-                <h3 className="text-lg font-bold mb-4">Update Profile Photo</h3>
-                <div className="space-y-4">
-                  <input
-                    type="url"
-                    value={photoUrl}
-                    onChange={(e) => setPhotoUrl(e.target.value)}
-                    placeholder="Enter image URL"
-                    className="w-full p-2 border rounded"
-                  />
-                  <div className="flex justify-end space-x-2">
-                    <Button
-                      onClick={() => {
-                        setShowPhotoInput(false);
-                        setPhotoUrl('');
-                      }}
-                      variant="outline"
-                    >
-                      Cancel
-                    </Button>
-                    <Button
-                      onClick={handlePhotoUrlSave}
-                      disabled={!photoUrl}
-                    >
-                      Save
-                    </Button>
-                  </div>
+            <div>
+              {!isEditing ? (
+                <Button
+                  onClick={() => setIsEditing(true)}
+                  variant="outline"
+                  size="sm"
+                  className="border-white/10 text-gray-200 hover:text-white hover:bg-white/5 rounded-xl text-xs"
+                >
+                  <Edit3 className="w-3.5 h-3.5 mr-1.5" />
+                  Edit Profile
+                </Button>
+              ) : (
+                <div className="flex space-x-2">
+                  <Button
+                    onClick={handleSaveProfile}
+                    size="sm"
+                    className="bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl text-xs"
+                  >
+                    <Save className="w-3.5 h-3.5 mr-1.5" />
+                    Save
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      setIsEditing(false);
+                      setEditedUser(user);
+                    }}
+                    variant="outline"
+                    size="sm"
+                    className="border-white/10 text-gray-300 hover:text-white hover:bg-white/5 rounded-xl text-xs"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Update Photo Modal */}
+        {showPhotoInput && (
+          <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-50 p-4">
+            <div className="bg-[#0c121e] rounded-3xl border border-white/10 p-6 sm:p-7 max-w-md w-full shadow-2xl space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-bold text-white">Update Profile Photo URL</h3>
+                <button
+                  onClick={() => {
+                    setShowPhotoInput(false);
+                    setPhotoUrl('');
+                  }}
+                  className="p-1 rounded-lg hover:bg-white/5 text-gray-400"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+              <input
+                type="url"
+                value={photoUrl}
+                onChange={(e) => setPhotoUrl(e.target.value)}
+                placeholder="https://example.com/photo.jpg"
+                className="w-full h-11 px-4 rounded-xl border border-white/10 bg-[#111827] text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-400"
+              />
+              <div className="flex justify-end space-x-2 pt-2">
+                <Button
+                  onClick={() => {
+                    setShowPhotoInput(false);
+                    setPhotoUrl('');
+                  }}
+                  variant="outline"
+                  className="border-white/10 text-gray-300 text-xs"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handlePhotoUrlSave}
+                  disabled={!photoUrl}
+                  className="bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs"
+                >
+                  Save Photo
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Profile Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Column: Account Details */}
+          <div className="space-y-6">
+            <div className="bg-[#0c121e] rounded-3xl border border-white/10 p-6 shadow-xl space-y-4">
+              <h2 className="text-sm font-mono uppercase tracking-wider text-amber-400 font-bold">
+                Student Credentials
+              </h2>
+              <div className="space-y-3.5 text-xs">
+                <div className="flex items-center text-gray-300">
+                  <Mail className="w-4 h-4 mr-3 text-amber-400 shrink-0" />
+                  <span className="truncate">{user.email}</span>
+                </div>
+                <div className="flex items-center text-gray-300">
+                  <Phone className="w-4 h-4 mr-3 text-amber-400 shrink-0" />
+                  {isEditing ? (
+                    <input
+                      type="tel"
+                      value={editedUser?.phone || ''}
+                      onChange={(e) => setEditedUser(prev => prev ? { ...prev, phone: e.target.value } : null)}
+                      className="flex-1 px-3 py-1.5 rounded-lg border border-white/10 bg-[#111827] text-white text-xs focus:outline-none focus:border-amber-400"
+                      placeholder="Phone number"
+                    />
+                  ) : (
+                    <span>{user.phone || 'No phone added'}</span>
+                  )}
+                </div>
+                <div className="flex items-center text-gray-300 font-mono">
+                  <Calendar className="w-4 h-4 mr-3 text-amber-400 shrink-0" />
+                  <span>Joined {new Date(user.createdAt).toLocaleDateString()}</span>
                 </div>
               </div>
             </div>
-          )}
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Personal Information */}
-            <div className="lg:col-span-1">
-              <motion.div
-                variants={item}
-                className="bg-white rounded-xl shadow-lg p-6 mb-8"
-              >
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-xl font-bold">Personal Information</h2>
-                  {!isEditing ? (
-                    <Button onClick={startEditing} variant="outline" size="sm">
-                      Edit Profile
-                    </Button>
-                  ) : (
-                    <div className="space-x-2">
-                      <Button onClick={handleSaveProfile} variant="default" size="sm">
-                        <Save className="w-4 h-4 mr-2" />
-                        Save
-                      </Button>
-                      <Button onClick={cancelEditing} variant="outline" size="sm">
-                        Cancel
-                      </Button>
-                    </div>
-                  )}
+            <div className="bg-[#0c121e] rounded-3xl border border-white/10 p-6 shadow-xl space-y-4">
+              <h2 className="text-sm font-mono uppercase tracking-wider text-amber-400 font-bold">
+                Progress Overview
+              </h2>
+              <div className="space-y-3 text-xs">
+                <div className="flex items-center justify-between text-gray-300">
+                  <div className="flex items-center">
+                    <BookOpen className="w-4 h-4 mr-2.5 text-amber-400" />
+                    <span>Courses Enrolled</span>
+                  </div>
+                  <span className="font-mono font-bold text-white">{enrolledCourses.length}</span>
                 </div>
-                <div className="space-y-4">
-                  <div className="flex items-center text-gray-600">
-                    <Mail className="w-5 h-5 mr-3" />
-                    <span>{user.email}</span>
+                <div className="flex items-center justify-between text-gray-300">
+                  <div className="flex items-center">
+                    <Award className="w-4 h-4 mr-2.5 text-emerald-400" />
+                    <span>Certificates</span>
                   </div>
-                  <div className="flex items-center text-gray-600">
-                    <Phone className="w-5 h-5 mr-3" />
-                    {isEditing ? (
-                      <input
-                        type="tel"
-                        value={editedUser?.phone || ''}
-                        onChange={(e) => setEditedUser(prev => prev ? { ...prev, phone: e.target.value } : null)}
-                        className="flex-1 p-2 border rounded"
-                        placeholder="Enter phone number"
-                      />
-                    ) : (
-                      <span>{user.phone}</span>
-                    )}
-                  </div>
-                  <div className="flex items-center text-gray-600">
-                    <Calendar className="w-5 h-5 mr-3" />
-                    <span>Joined {new Date(user.createdAt).toLocaleDateString()}</span>
-                  </div>
+                  <span className="font-mono font-bold text-white">0</span>
                 </div>
-              </motion.div>
-
-              <motion.div
-                variants={item}
-                className="bg-white rounded-xl shadow-lg p-6"
-              >
-                <h2 className="text-xl font-bold mb-4">Learning Stats</h2>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center text-gray-600">
-                      <BookOpen className="w-5 h-5 mr-3" />
-                      <span>Courses Enrolled</span>
-                    </div>
-                    <span className="font-semibold">{enrolledCourses.length}</span>
+                <div className="flex items-center justify-between text-gray-300">
+                  <div className="flex items-center">
+                    <Clock className="w-4 h-4 mr-2.5 text-sky-400" />
+                    <span>Sprint Hours</span>
                   </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center text-gray-600">
-                      <Award className="w-5 h-5 mr-3" />
-                      <span>Certificates Earned</span>
-                    </div>
-                    <span className="font-semibold">0</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center text-gray-600">
-                      <Clock className="w-5 h-5 mr-3" />
-                      <span>Hours Learned</span>
-                    </div>
-                    <span className="font-semibold">0</span>
-                  </div>
+                  <span className="font-mono font-bold text-white">0</span>
                 </div>
-              </motion.div>
-            </div>
-
-            {/* Main Content */}
-            <div className="lg:col-span-2">
-              {/* Enrolled Courses */}
-              <motion.div
-                variants={item}
-                className="bg-white rounded-xl shadow-lg p-6 mb-8"
-              >
-                <h2 className="text-xl font-bold mb-4">Enrolled Courses</h2>
-                {enrolledCourses.length === 0 ? (
-                  <div className="text-center py-8">
-                    <BookOpen className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-500">You haven't enrolled in any courses yet.</p>
-                    <Button
-                      onClick={() => navigate('/programs')}
-                      className="mt-4"
-                    >
-                      Browse Courses
-                    </Button>
-                  </div>
-                ) : (
-                  <motion.div
-                    variants={container}
-                    className="space-y-4"
-                  >
-                    {enrolledCourses.map((course) => (
-                      <motion.div
-                        key={course.id}
-                        variants={item}
-                        whileHover={{ y: -5 }}
-                        className="bg-white rounded-lg shadow p-6 border"
-                      >
-                        <div className="flex justify-between items-center mb-4">
-                          <h3 className="text-lg font-semibold">{course.title}</h3>
-                          <span className="text-sm text-gray-500">
-                            Enrolled on {new Date(course.enrolledAt).toLocaleDateString()}
-                          </span>
-                        </div>
-                        <div className="mb-4">
-                          <div className="flex justify-between text-sm text-gray-600 mb-1">
-                            <span>Progress</span>
-                            <span>{course.progress}%</span>
-                          </div>
-                          <div className="w-full bg-gray-200 rounded-full h-2">
-                            <div
-                              className="bg-indigo-600 h-2 rounded-full"
-                              style={{ width: `${course.progress}%` }}
-                            />
-                          </div>
-                        </div>
-                        <Button
-                          onClick={() => navigate(`/programs/${course.id}`)}
-                          variant="outline"
-                          className="w-full"
-                        >
-                          Continue Learning
-                        </Button>
-                      </motion.div>
-                    ))}
-                  </motion.div>
-                )}
-              </motion.div>
-
-              {/* Achievements */}
-              <motion.div
-                variants={item}
-                className="bg-white rounded-xl shadow-lg p-6"
-              >
-                <h2 className="text-xl font-bold mb-4">Achievements</h2>
-                <div className="text-center py-8">
-                  <Award className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500">Complete courses to earn achievements!</p>
-                </div>
-              </motion.div>
+              </div>
             </div>
           </div>
-        </motion.div>
+
+          {/* Right Column: Enrolled Courses */}
+          <div className="lg:col-span-2 space-y-6">
+            <div className="bg-[#0c121e] rounded-3xl border border-white/10 p-6 sm:p-7 shadow-xl">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-lg font-black text-white tracking-tight">Active Enrolled Courses</h2>
+                <span className="text-xs font-mono text-gray-400">{enrolledCourses.length} Assigned</span>
+              </div>
+
+              {enrolledCourses.length === 0 ? (
+                <div className="text-center py-12 bg-[#080d16] rounded-2xl border border-dashed border-white/10 p-6 space-y-3">
+                  <BookOpen className="w-10 h-10 text-gray-500 mx-auto" />
+                  <p className="text-xs sm:text-sm text-gray-400">You haven&apos;t been assigned any course modules yet.</p>
+                  <Button
+                    onClick={() => navigate('/programs')}
+                    className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold rounded-xl text-xs"
+                  >
+                    Explore Course Catalog
+                  </Button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {enrolledCourses.map((course) => (
+                    <div
+                      key={course.id}
+                      className="bg-[#080d16] rounded-2xl p-5 border border-white/[0.08] hover:border-amber-400/30 transition-all flex flex-col justify-between"
+                    >
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                        <h3 className="text-base font-bold text-white">{course.title}</h3>
+                        <span className="text-[11px] font-mono text-gray-400">
+                          Enrolled: {new Date(course.enrolledAt).toLocaleDateString()}
+                        </span>
+                      </div>
+
+                      <div className="mb-4">
+                        <div className="flex justify-between text-xs text-gray-400 mb-1.5 font-mono">
+                          <span>Syllabus Completion</span>
+                          <span className="text-amber-400 font-bold">{course.progress}%</span>
+                        </div>
+                        <div className="w-full bg-[#111827] rounded-full h-2 overflow-hidden">
+                          <div
+                            className="bg-gradient-to-r from-amber-500 to-orange-600 h-2 rounded-full transition-all duration-300"
+                            style={{ width: `${course.progress}%` }}
+                          />
+                        </div>
+                      </div>
+
+                      <Button
+                        onClick={() => navigate(`/programs/${course.id}`)}
+                        variant="outline"
+                        size="sm"
+                        className="w-full border-white/10 text-gray-200 hover:text-white hover:bg-white/5 rounded-xl text-xs"
+                      >
+                        Continue Learning Modules
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

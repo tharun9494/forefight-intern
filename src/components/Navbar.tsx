@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Menu, X, LogIn, User, Briefcase } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Menu, X, LogIn, User, Briefcase, ChevronDown } from 'lucide-react';
 import { Button } from './ui/button';
 import AuthModal from './AuthModal';
 import { auth } from '@/lib/firebase';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
-import logo1 from '../imgaes/logo1.png'
+import { onAuthStateChanged, signOut, User as FirebaseUser } from 'firebase/auth';
+import logo1 from '../imgaes/logo1.png';
 
 interface NavbarProps {
   isAdmin: boolean;
@@ -15,14 +15,13 @@ interface NavbarProps {
 export default function Navbar({ isAdmin }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [user, setUser] = useState(auth.currentUser);
+  const [user, setUser] = useState<FirebaseUser | null>(auth.currentUser);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user);
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
     });
 
     return () => unsubscribe();
@@ -36,25 +35,50 @@ export default function Navbar({ isAdmin }: NavbarProps) {
     { name: 'Contact Us', path: '/about#contact' },
   ];
 
+  const handleNavClick = (path: string, e?: React.MouseEvent) => {
+    setIsOpen(false);
+    if (path.includes('#')) {
+      const [targetPage, hash] = path.split('#');
+      if (location.pathname === targetPage || (targetPage === '' && location.pathname === '/')) {
+        const el = document.getElementById(hash);
+        if (el) {
+          e?.preventDefault();
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    }
+  };
+
   const handleSignOut = async () => {
     try {
       await signOut(auth);
       setShowProfileMenu(false);
-      navigate('/');
     } catch (error) {
       console.error('Error signing out:', error);
     }
   };
 
   return (
-    <nav className="fixed w-full bg-white/90 backdrop-blur-md z-50 shadow-sm border-b border-gray-100">
+    <nav className="fixed top-0 left-0 right-0 w-full bg-[#070b13]/85 backdrop-blur-xl z-50 border-b border-white/[0.08] shadow-[0_4px_30px_rgba(0,0,0,0.5)] transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center space-x-2">
-            <img src={logo1} alt='ForeFight Era Logo' className="h-16 w-auto mt-0 opacity-90"></img>
-            <span className="text-2xl font-bold bg-gradient-to-r from-yellow-500 to-yellow-700 bg-clip-text text-transparent">
-              ForeFight Era
-            </span>
+          {/* Logo & Brand Identity */}
+          <Link to="/" onClick={(e) => handleNavClick('/', e)} className="flex items-center space-x-3 group">
+            <div className="relative">
+              <img
+                src={logo1}
+                alt="ForeFight Era Logo"
+                className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xl font-black tracking-tight bg-gradient-to-r from-amber-300 via-amber-400 to-orange-400 bg-clip-text text-transparent">
+                ForeFight Era
+              </span>
+              <span className="text-[9px] uppercase tracking-widest text-gray-400 font-mono -mt-1 hidden sm:block">
+                Technology Headquarters
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Navigation */}
@@ -64,80 +88,101 @@ export default function Navbar({ isAdmin }: NavbarProps) {
                 <Link
                   key={item.name}
                   to={item.path}
-                  className="relative inline-flex items-center px-4 py-1.5 rounded-full text-xs font-bold text-white bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 shadow-md hover:from-amber-600 hover:to-orange-700 transition-all duration-200 transform hover:scale-105 border border-amber-300/40 ring-2 ring-orange-400/30"
+                  onClick={(e) => handleNavClick(item.path, e)}
+                  className="relative inline-flex items-center px-4 py-1.5 rounded-full text-xs font-semibold text-amber-200 bg-amber-500/15 border border-amber-400/35 hover:bg-amber-500/25 hover:border-amber-400/50 shadow-sm transition-all duration-200 group"
                 >
-                  <Briefcase className="w-3.5 h-3.5 mr-1.5 text-amber-100" />
+                  <Briefcase className="w-3.5 h-3.5 mr-1.5 text-amber-400 transition-transform group-hover:-translate-y-0.5" />
                   <span>{item.name}</span>
-                  <span className="ml-1.5 px-1.5 py-0.2 text-[9px] font-extrabold uppercase tracking-wide bg-white/25 rounded-full">
-                    Hiring
+                  <span className="ml-2 px-1.5 py-0.2 text-[9px] font-mono uppercase tracking-wide bg-amber-400/20 text-amber-300 rounded border border-amber-400/30">
+                    Cohorts
                   </span>
                 </Link>
               ) : (
                 <Link
                   key={item.name}
                   to={item.path}
-                  className={`${
+                  onClick={(e) => handleNavClick(item.path, e)}
+                  className={`relative text-xs lg:text-sm font-medium transition-colors duration-200 py-1 ${
                     location.pathname === item.path
-                      ? 'text-orange-600 font-semibold'
-                      : 'text-gray-700 hover:text-orange-600 font-medium'
-                  } transition-colors duration-200 text-sm`}
+                      ? 'text-amber-400 font-semibold'
+                      : 'text-gray-300 hover:text-white'
+                  }`}
                 >
                   {item.name}
+                  {location.pathname === item.path && (
+                    <motion.div
+                      layoutId="navbar-indicator"
+                      className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-amber-400 to-orange-500 rounded-full"
+                    />
+                  )}
                 </Link>
               )
             ))}
-            
+
             {user ? (
               <div className="relative">
-                <Button
-                  variant="ghost"
+                <button
                   onClick={() => setShowProfileMenu(!showProfileMenu)}
-                  className="flex items-center space-x-2"
+                  className="flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-gray-900/80 hover:bg-gray-800 text-gray-200 hover:text-white border border-white/10 text-xs font-medium transition-all"
                 >
-                  <User className="w-5 h-5" />
-                  <span>{user.email?.split('@')[0]}</span>
-                </Button>
+                  <div className="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-[10px]">
+                    {user.email ? user.email.charAt(0).toUpperCase() : 'U'}
+                  </div>
+                  <span className="max-w-[120px] truncate">{user.email?.split('@')[0]}</span>
+                  <ChevronDown className="w-3.5 h-3.5 text-gray-400" />
+                </button>
 
-                {showProfileMenu && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50"
-                  >
-                    <Link
-                      to="/profile"
-                      className="block px-4 py-2 text-gray-700 hover:bg-indigo-50"
-                      onClick={() => setShowProfileMenu(false)}
+                <AnimatePresence>
+                  {showProfileMenu && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 8, scale: 0.95 }}
+                      transition={{ duration: 0.15 }}
+                      className="absolute right-0 mt-2 w-52 bg-[#0c121e] border border-white/10 rounded-2xl shadow-2xl py-2 z-[60] overflow-hidden"
                     >
-                      Profile
-                    </Link>
-                    {isAdmin && (
+                      <div className="px-4 py-2 border-b border-white/5">
+                        <p className="text-[11px] text-gray-400">Signed in as</p>
+                        <p className="text-xs font-semibold text-white truncate">{user.email}</p>
+                      </div>
                       <Link
-                        to="/admin"
-                        className="block px-4 py-2 text-gray-700 hover:bg-indigo-50"
+                        to="/profile"
                         onClick={() => setShowProfileMenu(false)}
+                        className="flex items-center px-4 py-2 text-xs text-gray-300 hover:text-white hover:bg-white/5 transition-colors"
                       >
-                        Admin Dashboard
+                        <User className="w-3.5 h-3.5 mr-2" />
+                        Student Portal
                       </Link>
-                    )}
-                    <button
-                      onClick={handleSignOut}
-                      className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-indigo-50"
-                    >
-                      Sign Out
-                    </button>
-                  </motion.div>
-                )}
+                      {isAdmin && (
+                        <Link
+                          to="/admin"
+                          onClick={() => setShowProfileMenu(false)}
+                          className="flex items-center px-4 py-2 text-xs text-amber-400 hover:text-amber-300 hover:bg-amber-500/10 transition-colors font-medium"
+                        >
+                          <Briefcase className="w-3.5 h-3.5 mr-2" />
+                          Admin Command
+                        </Link>
+                      )}
+                      <div className="border-t border-white/5 mt-1">
+                        <button
+                          onClick={handleSignOut}
+                          className="w-full text-left px-4 py-2 text-xs text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-colors"
+                        >
+                          Sign Out
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             ) : (
               <Button
                 variant="ghost"
                 onClick={() => setShowAuthModal(true)}
-                className="flex items-center space-x-2"
+                className="flex items-center space-x-2 text-xs font-medium text-gray-300 hover:text-white hover:bg-white/5 border border-transparent hover:border-white/10 rounded-xl px-4 py-2 transition-all cursor-pointer"
               >
-                <LogIn className="w-4 h-4" />
-                <span>Login</span>
+                <LogIn className="w-4 h-4 text-amber-400" />
+                <span>Portal Login</span>
               </Button>
             )}
           </div>
@@ -146,95 +191,105 @@ export default function Navbar({ isAdmin }: NavbarProps) {
           <div className="md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-600 hover:text-indigo-600"
+              className="p-2 rounded-xl text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
+              aria-label="Toggle navigation menu"
             >
-              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Navigation Menu */}
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          className="md:hidden"
-        >
-          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white shadow-lg">
+      {/* Mobile Navigation Drawer */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden border-t border-white/10 bg-[#070b13]/98 backdrop-blur-2xl px-4 pt-3 pb-6 space-y-2 overflow-hidden"
+          >
             {navItems.map((item) => (
               item.highlight ? (
                 <Link
                   key={item.name}
                   to={item.path}
-                  className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-base font-bold text-white bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 shadow-md my-1"
-                  onClick={() => setIsOpen(false)}
+                  className="flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold text-amber-300 bg-amber-500/15 border border-amber-400/30"
+                  onClick={(e) => handleNavClick(item.path, e)}
                 >
                   <span className="flex items-center">
-                    <Briefcase className="w-4 h-4 mr-2 text-amber-100" />
+                    <Briefcase className="w-4 h-4 mr-2.5 text-amber-400" />
                     {item.name}
                   </span>
-                  <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full font-semibold">
-                    Apply Now
+                  <span className="text-[10px] font-mono bg-amber-400/20 px-2 py-0.5 rounded text-amber-300">
+                    Active Cohorts
                   </span>
                 </Link>
               ) : (
                 <Link
                   key={item.name}
                   to={item.path}
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-orange-600 hover:bg-orange-50"
-                  onClick={() => setIsOpen(false)}
+                  className={`block px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                    location.pathname === item.path
+                      ? 'text-amber-400 bg-white/5 font-semibold'
+                      : 'text-gray-300 hover:text-white hover:bg-white/5'
+                  }`}
+                  onClick={(e) => handleNavClick(item.path, e)}
                 >
                   {item.name}
                 </Link>
               )
             ))}
-            {user ? (
-              <>
-                <Link
-                  to="/profile"
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
-                  onClick={() => setIsOpen(false)}
-                >
-                  Profile
-                </Link>
-                {isAdmin && (
+
+            <div className="pt-2 border-t border-white/10">
+              {user ? (
+                <div className="space-y-1">
                   <Link
-                    to="/admin"
-                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                    to="/profile"
+                    className="block px-4 py-2 text-sm text-gray-300 hover:text-white"
                     onClick={() => setIsOpen(false)}
                   >
-                    Admin Dashboard
+                    Profile
                   </Link>
-                )}
-                <button
-                  onClick={handleSignOut}
-                  className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-indigo-600 hover:bg-indigo-50"
+                  {isAdmin && (
+                    <Link
+                      to="/admin"
+                      className="block px-4 py-2 text-sm text-amber-300 font-semibold"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Admin Dashboard
+                    </Link>
+                  )}
+                  <button
+                    onClick={() => {
+                      handleSignOut();
+                      setIsOpen(false);
+                    }}
+                    className="block w-full text-left px-4 py-2 text-sm text-red-400 hover:text-red-300"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              ) : (
+                <Button
+                  onClick={() => {
+                    setShowAuthModal(true);
+                    setIsOpen(false);
+                  }}
+                  className="w-full bg-gradient-to-r from-amber-500 to-orange-600 text-white font-semibold py-2.5 rounded-xl shadow-lg cursor-pointer"
                 >
-                  Sign Out
-                </button>
-              </>
-            ) : (
-              <Button
-                variant="ghost"
-                onClick={() => {
-                  setShowAuthModal(true);
-                  setIsOpen(false);
-                }}
-                className="w-full justify-center"
-              >
-                <LogIn className="w-4 h-4 mr-2" />
-                Login
-              </Button>
-            )}
-          </div>
-        </motion.div>
-      )}
+                  <LogIn className="w-4 h-4 mr-2" />
+                  Portal Login
+                </Button>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      <AuthModal 
-        isOpen={showAuthModal} 
-        onClose={() => setShowAuthModal(false)} 
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
         defaultMode={true}
       />
     </nav>

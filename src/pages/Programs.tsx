@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Brain,
@@ -8,7 +8,6 @@ import {
   BookOpen,
   Layers,
   Server,
-  Code2,
   GitBranch,
   Code,
   Cpu,
@@ -19,20 +18,15 @@ import {
   Search,
   CheckCircle2,
   ArrowRight,
-  BookMarked,
   X,
   Mail,
   Phone,
   User,
-  GraduationCap,
   Building,
   Send,
   SlidersHorizontal,
-  Compass,
   Check,
   Award,
-  Clock,
-  HelpCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
@@ -712,6 +706,28 @@ export default function Programs() {
     });
   }, [selectedCategory, searchQuery]);
 
+  // Handle ESC key to close modals and body scroll locking
+  useEffect(() => {
+    if (!selectedCourseForDetails && !selectedCourseForInquiry) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setSelectedCourseForDetails(null);
+        setSelectedCourseForInquiry(null);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [selectedCourseForDetails, selectedCourseForInquiry]);
+
   const handleOpenInquiry = (course: CourseProgram) => {
     setSelectedCourseForInquiry(course);
   };
@@ -767,7 +783,7 @@ export default function Programs() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 pb-20">
+    <div className="min-h-screen bg-[#070a11] text-gray-100 pb-20">
       {/* 1. HERO SECTION */}
       <section className="relative bg-gradient-to-b from-gray-950 via-slate-900 to-gray-950 text-white overflow-hidden py-16 sm:py-24 px-4 sm:px-6 lg:px-8 border-b border-slate-800">
         {/* Subtle grid background */}
@@ -855,7 +871,7 @@ export default function Programs() {
 
       {/* 2. SEARCH & FILTER CONTROLS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-7 relative z-20">
-        <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/60 border border-slate-200/80 p-4 sm:p-6 space-y-4">
+        <div className="bg-[#0c121e] rounded-2xl shadow-2xl border border-white/10 p-4 sm:p-6 space-y-4">
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
             {/* Search Bar */}
             <div className="relative w-full md:w-96">
@@ -865,7 +881,7 @@ export default function Programs() {
                 placeholder="Search courses (e.g. AI, Linux, Python, ARM, RAG)..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 text-sm bg-slate-50/50 transition-all"
+                className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 text-sm bg-[#111827] text-white border-white/10 placeholder-gray-500 transition-all"
               />
               {searchQuery && (
                 <button
@@ -892,7 +908,7 @@ export default function Programs() {
                     className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 ${
                       isSelected
                         ? 'bg-amber-600 text-white shadow-md shadow-amber-500/25 scale-105'
-                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                        : 'bg-[#111827] text-gray-300 hover:bg-white/10 border border-white/5'
                     }`}
                   >
                     <span>{cat}</span>
@@ -927,10 +943,10 @@ export default function Programs() {
       {/* 3. COURSE CARDS GRID */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
         {filteredPrograms.length === 0 ? (
-          <div className="text-center py-20 bg-white rounded-2xl border border-dashed border-slate-300">
-            <SlidersHorizontal className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-            <h3 className="text-lg font-bold text-slate-800">No courses match your criteria</h3>
-            <p className="text-sm text-slate-500 mt-1 max-w-sm mx-auto">
+          <div className="text-center py-20 bg-[#0c121e] rounded-3xl border border-dashed border-white/20 p-8">
+            <SlidersHorizontal className="w-12 h-12 text-gray-500 mx-auto mb-3" />
+            <h3 className="text-lg font-bold text-white">No courses match your criteria</h3>
+            <p className="text-sm text-gray-400 mt-1 max-w-sm mx-auto">
               Try adjusting your search terms or select another category above.
             </p>
             <Button
@@ -939,7 +955,7 @@ export default function Programs() {
                 setSearchQuery('');
                 setSelectedCategory('All');
               }}
-              className="mt-4"
+              className="mt-4 border-white/10 text-gray-200 hover:text-white hover:bg-white/5"
             >
               Reset Filters
             </Button>
@@ -951,56 +967,52 @@ export default function Programs() {
               return (
                 <motion.div
                   key={course.id}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: idx * 0.03 }}
-                  className={`group relative bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between overflow-hidden ${course.borderHover}`}
+                  transition={{ duration: 0.35, delay: idx * 0.02 }}
+                  className="group relative bg-[#0c121e]/90 backdrop-blur-xl rounded-3xl border border-white/[0.08] hover:border-amber-400/40 shadow-xl transition-all duration-300 flex flex-col justify-between overflow-hidden"
                 >
-                  {/* Top Header Glow Bar */}
-                  <div className={`h-1.5 w-full bg-gradient-to-r ${course.gradient}`} />
+                  {/* Top Ambient Trim */}
+                  <div className="h-[2px] w-full bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600" />
 
-                  <div className="p-6 flex-1 flex flex-col">
+                  <div className="p-6 sm:p-7 flex-1 flex flex-col">
                     {/* Badge & Icon Row */}
-                    <div className="flex items-start justify-between gap-3 mb-4">
-                      <div
-                        className={`w-12 h-12 rounded-xl flex items-center justify-center bg-gradient-to-br ${course.gradient} text-white shadow-md shadow-slate-200 group-hover:scale-105 transition-transform duration-300`}
-                      >
-                        <IconComponent className="w-6 h-6" />
+                    <div className="flex items-center justify-between gap-3 mb-4">
+                      <div className="w-11 h-11 rounded-xl bg-amber-500/15 border border-amber-400/25 text-amber-400 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                        <IconComponent className="w-5 h-5" />
                       </div>
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-bold border tracking-wide uppercase ${course.badgeStyle}`}
-                      >
+                      <span className="px-3 py-1 rounded-full text-[10px] font-mono font-bold border tracking-wider uppercase bg-amber-500/10 text-amber-300 border-amber-400/30">
                         {course.badge}
                       </span>
                     </div>
 
                     {/* Category Label */}
-                    <p className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-1">
+                    <p className="text-[11px] font-mono uppercase tracking-wider text-amber-400/80 mb-1.5 font-semibold">
                       {course.category}
                     </p>
 
                     {/* Course Title */}
-                    <h3 className="text-xl font-bold text-slate-900 group-hover:text-amber-600 transition-colors duration-200 mb-2 leading-snug">
+                    <h3 className="text-xl font-bold text-white group-hover:text-amber-400 transition-colors duration-200 mb-2 leading-snug">
                       {course.title}
                     </h3>
 
                     {/* Brief Summary */}
-                    <p className="text-sm text-slate-600 leading-relaxed mb-5 line-clamp-2">
+                    <p className="text-xs sm:text-sm text-gray-300 leading-relaxed mb-6 line-clamp-3">
                       {course.summary}
                     </p>
 
                     {/* Key Topics / Highlights Pills */}
                     <div className="mt-auto pt-2">
-                      <p className="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
-                        Key Technologies & Topics:
+                      <p className="text-[10px] font-mono uppercase tracking-wider text-gray-400 mb-2 font-semibold">
+                        Core Competencies:
                       </p>
-                      <div className="flex flex-wrap gap-1.5 mb-5">
+                      <div className="flex flex-wrap gap-1.5 mb-2">
                         {course.highlights.map((h, i) => (
                           <span
                             key={i}
-                            className="inline-flex items-center text-[11px] font-medium bg-slate-100 text-slate-700 px-2.5 py-1 rounded-md border border-slate-200/60"
+                            className="inline-flex items-center text-[11px] font-medium bg-[#111927] text-gray-300 px-2.5 py-1 rounded-lg border border-white/10"
                           >
-                            <CheckCircle2 className="w-3 h-3 mr-1 text-emerald-500" />
+                            <CheckCircle2 className="w-3 h-3 mr-1 text-amber-400" />
                             {h}
                           </span>
                         ))}
@@ -1009,10 +1021,10 @@ export default function Programs() {
                   </div>
 
                   {/* Card Actions Footer */}
-                  <div className="px-6 py-4 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between gap-3">
+                  <div className="px-6 py-4 bg-[#080d16] border-t border-white/[0.06] flex items-center justify-between gap-3">
                     <button
                       onClick={() => setSelectedCourseForDetails(course)}
-                      className="text-xs font-bold text-slate-700 hover:text-amber-600 inline-flex items-center gap-1 transition-colors py-2"
+                      className="text-xs font-semibold text-gray-300 hover:text-amber-400 inline-flex items-center gap-1.5 transition-colors py-2"
                     >
                       <span>View Syllabus</span>
                       <ArrowRight className="w-3.5 h-3.5" />
@@ -1021,7 +1033,7 @@ export default function Programs() {
                     <Button
                       onClick={() => handleOpenInquiry(course)}
                       size="sm"
-                      className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-600 hover:to-orange-700 text-white font-semibold text-xs rounded-xl shadow-sm hover:shadow-md transition-all"
+                      className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold text-xs rounded-xl shadow-md transition-all active:scale-[0.99]"
                     >
                       Inquire Now
                     </Button>
@@ -1036,55 +1048,62 @@ export default function Programs() {
       {/* 4. DETAIL SYLLABUS MODAL */}
       <AnimatePresence>
         {selectedCourseForDetails && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm overflow-y-auto">
+          <div
+            className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 md:p-6"
+            role="dialog"
+            aria-modal="true"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setSelectedCourseForDetails(null);
+            }}
+          >
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              initial={{ opacity: 0, scale: 0.96, y: 12 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col overflow-hidden border border-slate-200 my-8"
+              exit={{ opacity: 0, scale: 0.96, y: 12 }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              className="relative bg-[#0c121e] rounded-3xl shadow-[0_24px_70px_rgba(0,0,0,0.85)] max-w-3xl w-full my-auto max-h-[calc(100vh-2rem)] flex flex-col overflow-hidden border border-white/10 text-gray-100"
             >
               {/* Modal Header */}
-              <div className="relative p-6 sm:p-8 bg-gradient-to-r from-slate-900 via-slate-800 to-gray-950 text-white">
+              <div className="relative p-6 sm:p-8 bg-[#080d16] border-b border-white/[0.08] text-white">
                 <button
                   onClick={() => setSelectedCourseForDetails(null)}
-                  className="absolute top-5 right-5 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+                  className="absolute top-5 right-5 p-2 rounded-xl bg-white/[0.05] hover:bg-white/[0.12] text-gray-400 hover:text-white transition-colors border border-white/5"
+                  aria-label="Close modal"
                 >
                   <X className="w-5 h-5" />
                 </button>
 
-                <div className="flex items-center gap-3 mb-2">
-                  <span
-                    className={`px-3 py-0.5 rounded-full text-xs font-bold uppercase tracking-wider ${selectedCourseForDetails.badgeStyle}`}
-                  >
+                <div className="flex items-center gap-2.5 mb-2.5">
+                  <span className="px-3 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-amber-500/15 border border-amber-400/30 text-amber-300">
                     {selectedCourseForDetails.badge}
                   </span>
-                  <span className="text-xs text-slate-300 font-medium">
+                  <span className="text-xs font-mono text-gray-400">
                     {selectedCourseForDetails.category}
                   </span>
                 </div>
 
-                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                <h2 className="text-2xl sm:text-3xl font-black tracking-tight">
                   {selectedCourseForDetails.title}
                 </h2>
-                <p className="text-sm text-slate-300 mt-2 leading-relaxed">
+                <p className="text-xs sm:text-sm text-gray-300 mt-2 leading-relaxed max-w-2xl">
                   {selectedCourseForDetails.description}
                 </p>
               </div>
 
               {/* Modal Body */}
-              <div className="p-6 sm:p-8 overflow-y-auto space-y-6 flex-1 text-slate-800">
+              <div className="p-6 sm:p-8 overflow-y-auto space-y-6 flex-1">
                 {/* Learning Outcomes */}
                 <div>
-                  <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">
-                    Key Learning Outcomes
+                  <h4 className="text-[11px] font-mono font-bold text-amber-400 uppercase tracking-wider mb-2.5">
+                    Target Learning Outcomes
                   </h4>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {selectedCourseForDetails.outcomes.map((out, i) => (
                       <div
                         key={i}
-                        className="bg-emerald-50/80 border border-emerald-200/60 rounded-xl p-3 text-xs text-emerald-900 font-medium flex items-start gap-2"
+                        className="bg-[#090e18] border border-emerald-500/30 rounded-2xl p-3 text-xs text-emerald-300 font-medium flex items-start gap-2"
                       >
-                        <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                        <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                         <span>{out}</span>
                       </div>
                     ))}
@@ -1093,26 +1112,26 @@ export default function Programs() {
 
                 {/* Modules Syllabus */}
                 <div>
-                  <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">
+                  <h4 className="text-[11px] font-mono font-bold text-amber-400 uppercase tracking-wider mb-3">
                     Curriculum Modules Breakdown
                   </h4>
                   <div className="space-y-3">
                     {selectedCourseForDetails.modules.map((mod, i) => (
                       <div
                         key={i}
-                        className="p-4 rounded-xl border border-slate-200 bg-slate-50/70 hover:bg-slate-50 transition-colors"
+                        className="p-4 rounded-2xl border border-white/[0.08] bg-[#090e18]"
                       >
-                        <h5 className="text-sm font-bold text-slate-900 mb-2 flex items-center gap-2">
-                          <span className="w-5 h-5 rounded-full bg-amber-500 text-white text-[11px] font-bold flex items-center justify-center shrink-0">
+                        <h5 className="text-sm font-bold text-white mb-2.5 flex items-center gap-2.5">
+                          <span className="w-5 h-5 rounded-full bg-amber-500 text-black text-[11px] font-mono font-bold flex items-center justify-center shrink-0">
                             {i + 1}
                           </span>
                           {mod.title}
                         </h5>
-                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 pl-7">
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 pl-7">
                           {mod.topics.map((t, ti) => (
                             <li
                               key={ti}
-                              className="text-xs text-slate-600 list-disc list-outside"
+                              className="text-xs text-gray-300 list-disc list-outside"
                             >
                               {t}
                             </li>
@@ -1123,21 +1142,21 @@ export default function Programs() {
                   </div>
                 </div>
 
-                {/* Prerequisites & Target Audience */}
+                {/* Prerequisites & Audience */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                  <div className="bg-slate-50 rounded-xl p-4 border border-slate-200/80">
-                    <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
-                      Who Is This Course For?
-                    </p>
-                    <p className="text-xs text-slate-700 leading-relaxed">
+                  <div className="p-4 rounded-2xl bg-[#090e18] border border-white/[0.06]">
+                    <h5 className="text-[11px] font-mono font-bold text-gray-400 uppercase tracking-wider mb-1">
+                      Target Audience
+                    </h5>
+                    <p className="text-xs text-gray-300 leading-relaxed">
                       {selectedCourseForDetails.targetAudience}
                     </p>
                   </div>
-                  <div className="bg-slate-50 rounded-xl p-4 border border-slate-200/80">
-                    <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">
-                      Prerequisites
-                    </p>
-                    <p className="text-xs text-slate-700 leading-relaxed">
+                  <div className="p-4 rounded-2xl bg-[#090e18] border border-white/[0.06]">
+                    <h5 className="text-[11px] font-mono font-bold text-gray-400 uppercase tracking-wider mb-1">
+                      Recommended Prerequisites
+                    </h5>
+                    <p className="text-xs text-gray-300 leading-relaxed">
                       {selectedCourseForDetails.prerequisites}
                     </p>
                   </div>
@@ -1145,15 +1164,15 @@ export default function Programs() {
               </div>
 
               {/* Modal Footer */}
-              <div className="p-4 sm:p-6 bg-slate-50 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <span className="text-xs text-slate-500 text-center sm:text-left">
+              <div className="p-4 sm:p-6 bg-[#080d16] border-t border-white/[0.08] flex flex-col sm:flex-row items-center justify-between gap-3">
+                <span className="text-xs text-gray-400 text-center sm:text-left">
                   Ready to enroll or need custom corporate/batch guidance?
                 </span>
                 <div className="flex gap-2 w-full sm:w-auto">
                   <Button
                     variant="outline"
                     onClick={() => setSelectedCourseForDetails(null)}
-                    className="w-full sm:w-auto text-xs"
+                    className="w-full sm:w-auto text-xs border-white/10 text-gray-300 hover:text-white hover:bg-white/5 rounded-xl"
                   >
                     Close
                   </Button>
@@ -1163,7 +1182,7 @@ export default function Programs() {
                       setSelectedCourseForDetails(null);
                       setSelectedCourseForInquiry(course);
                     }}
-                    className="w-full sm:w-auto bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold text-xs"
+                    className="w-full sm:w-auto bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold text-xs rounded-xl shadow-md"
                   >
                     Inquire for this Course
                   </Button>
@@ -1177,38 +1196,47 @@ export default function Programs() {
       {/* 5. INQUIRY / ENROLLMENT APPLICATION MODAL */}
       <AnimatePresence>
         {selectedCourseForInquiry && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm overflow-y-auto">
+          <div
+            className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 md:p-6"
+            role="dialog"
+            aria-modal="true"
+            onClick={(e) => {
+              if (e.target === e.currentTarget) setSelectedCourseForInquiry(null);
+            }}
+          >
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              initial={{ opacity: 0, scale: 0.96, y: 12 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-200 my-8"
+              exit={{ opacity: 0, scale: 0.96, y: 12 }}
+              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              className="relative bg-[#0c121e] rounded-3xl shadow-[0_24px_70px_rgba(0,0,0,0.85)] max-w-lg w-full my-auto max-h-[calc(100vh-2rem)] flex flex-col overflow-hidden border border-white/10"
             >
-              <div className="p-6 bg-gradient-to-r from-slate-900 to-slate-800 text-white relative">
+              <div className="p-6 bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 text-white relative">
                 <button
                   onClick={() => setSelectedCourseForInquiry(null)}
                   className="absolute top-5 right-5 p-1.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors"
+                  aria-label="Close modal"
                 >
                   <X className="w-5 h-5" />
                 </button>
-                <span className="text-xs font-semibold uppercase tracking-wider text-amber-400">
+                <span className="text-[10px] font-mono font-semibold uppercase tracking-wider text-amber-200">
                   Course Inquiry & Enrollment
                 </span>
-                <h3 className="text-xl font-bold mt-1 text-white">
+                <h3 className="text-xl font-black mt-1 text-white">
                   {selectedCourseForInquiry.title}
                 </h3>
-                <p className="text-xs text-slate-300 mt-1">
-                  Submit your details below and our academic advisory team will connect with full course curriculum, schedule, and onboarding steps.
+                <p className="text-xs text-white/90 mt-1">
+                  Submit your details below and our academic advisory team will connect with curriculum schedules and onboarding steps.
                 </p>
               </div>
 
-              <form onSubmit={handleInquirySubmit} className="p-6 space-y-4">
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
-                    Full Name *
+              <form onSubmit={handleInquirySubmit} className="p-6 sm:p-8 space-y-4 overflow-y-auto">
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-mono font-bold uppercase tracking-wider text-gray-300">
+                    Full Name <span className="text-amber-400">*</span>
                   </label>
                   <div className="relative">
-                    <User className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <User className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
                     <input
                       type="text"
                       required
@@ -1217,18 +1245,18 @@ export default function Programs() {
                       onChange={(e) =>
                         setInquiryForm({ ...inquiryForm, fullName: e.target.value })
                       }
-                      className="w-full pl-9 pr-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500"
+                      className="w-full h-11 pl-10 pr-4 rounded-xl border border-white/10 bg-[#0f1728] text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20"
                     />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
-                      Email Address *
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-mono font-bold uppercase tracking-wider text-gray-300">
+                      Email Address <span className="text-amber-400">*</span>
                     </label>
                     <div className="relative">
-                      <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                      <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
                       <input
                         type="email"
                         required
@@ -1237,17 +1265,17 @@ export default function Programs() {
                         onChange={(e) =>
                           setInquiryForm({ ...inquiryForm, email: e.target.value })
                         }
-                        className="w-full pl-9 pr-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500"
+                        className="w-full h-11 pl-10 pr-4 rounded-xl border border-white/10 bg-[#0f1728] text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20"
                       />
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
-                      Phone Number *
+                  <div className="space-y-1.5">
+                    <label className="block text-xs font-mono font-bold uppercase tracking-wider text-gray-300">
+                      Phone Number <span className="text-amber-400">*</span>
                     </label>
                     <div className="relative">
-                      <Phone className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                      <Phone className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
                       <input
                         type="tel"
                         required
@@ -1256,32 +1284,32 @@ export default function Programs() {
                         onChange={(e) =>
                           setInquiryForm({ ...inquiryForm, phone: e.target.value })
                         }
-                        className="w-full pl-9 pr-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500"
+                        className="w-full h-11 pl-10 pr-4 rounded-xl border border-white/10 bg-[#0f1728] text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20"
                       />
                     </div>
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-mono font-bold uppercase tracking-wider text-gray-300">
                     College / University / Company (Optional)
                   </label>
                   <div className="relative">
-                    <Building className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                    <Building className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
                     <input
                       type="text"
-                      placeholder="e.g. IIT Madras, BITS, VIT or Company Name"
+                      placeholder="e.g. JNTU, VIT or Company Name"
                       value={inquiryForm.college}
                       onChange={(e) =>
                         setInquiryForm({ ...inquiryForm, college: e.target.value })
                       }
-                      className="w-full pl-9 pr-3 py-2 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500"
+                      className="w-full h-11 pl-10 pr-4 rounded-xl border border-white/10 bg-[#0f1728] text-sm text-white placeholder-gray-500 focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20"
                     />
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-mono font-bold uppercase tracking-wider text-gray-300">
                     Questions / Background Note (Optional)
                   </label>
                   <textarea
@@ -1291,7 +1319,7 @@ export default function Programs() {
                     onChange={(e) =>
                       setInquiryForm({ ...inquiryForm, message: e.target.value })
                     }
-                    className="w-full p-3 text-sm rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500"
+                    className="w-full p-3 text-sm rounded-xl border border-white/10 bg-[#0f1728] text-white placeholder-gray-500 focus:outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20"
                   />
                 </div>
 
@@ -1300,14 +1328,14 @@ export default function Programs() {
                     type="button"
                     variant="outline"
                     onClick={() => setSelectedCourseForInquiry(null)}
-                    className="text-xs"
+                    className="text-xs border-white/10 text-gray-300 hover:text-white hover:bg-white/5 rounded-xl"
                   >
                     Cancel
                   </Button>
                   <Button
                     type="submit"
                     disabled={submittingInquiry}
-                    className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold text-xs rounded-xl shadow-md"
+                    className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold text-xs rounded-xl shadow-md px-5 h-10"
                   >
                     {submittingInquiry ? (
                       <span className="flex items-center gap-1.5">
@@ -1365,3 +1393,4 @@ export default function Programs() {
     </div>
   );
 }
+

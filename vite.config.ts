@@ -12,6 +12,18 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  build: {
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          three: ['three'],
+          firebase: ['firebase/app', 'firebase/auth', 'firebase/firestore'],
+          motion: ['framer-motion'],
+        },
+      },
+    },
+  },
   server: {
     proxy: {
       '/api/phonepe': {
@@ -19,23 +31,21 @@ export default defineConfig({
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/phonepe/, ''),
         secure: false,
-        configure: (proxy, _options) => {
-          proxy.on('proxyReq', (proxyReq, req, _res) => {
-            // Forward all headers from the original request
+        configure: (proxy) => {
+          // Forward all headers from the original request
+          proxy.on('proxyReq', (proxyReq, req) => {
             if (req.headers['x-verify']) {
               proxyReq.setHeader('X-VERIFY', req.headers['x-verify']);
             }
             if (req.headers['x-merchant-id']) {
               proxyReq.setHeader('X-MERCHANT-ID', req.headers['x-merchant-id']);
             }
-            // Log the request for debugging
             console.log('Proxy Request:', {
               url: proxyReq.path,
               headers: proxyReq.getHeaders()
             });
           });
-          proxy.on('proxyRes', (proxyRes, req, _res) => {
-            // Log the response for debugging
+          proxy.on('proxyRes', (proxyRes, req) => {
             console.log('Proxy Response:', {
               statusCode: proxyRes.statusCode,
               headers: proxyRes.headers,

@@ -210,20 +210,20 @@ export default function CourseDetail() {
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-8">
               {activeTab === 'about' && (
-                <div className="bg-white rounded-xl shadow-lg p-6">
+                <div className="bg-[#0c121e] rounded-2xl shadow-xl border border-white/10 p-6">
                   <h2 className="text-2xl font-bold mb-4">About This Program</h2>
                   <div className="prose max-w-none">
-                    <p className="text-gray-600 mb-6">{program.about}</p>
+                    <p className="text-gray-300 mb-6">{program.about}</p>
                     
                     <h3 className="text-xl font-semibold mb-3">Prerequisites</h3>
-                    <ul className="list-disc list-inside text-gray-600 mb-6">
+                    <ul className="list-disc list-inside text-gray-300 mb-6">
                       {program.prerequisites.map((req, index) => (
                         <li key={index}>{req}</li>
                       ))}
                     </ul>
                     
                     <h3 className="text-xl font-semibold mb-3">Learning Objectives</h3>
-                    <ul className="list-disc list-inside text-gray-600">
+                    <ul className="list-disc list-inside text-gray-300">
                       {program.learningObjectives.map((obj, index) => (
                         <li key={index}>{obj}</li>
                       ))}
@@ -233,7 +233,7 @@ export default function CourseDetail() {
               )}
 
               {activeTab === 'videos' && (
-                <div className="bg-white rounded-xl shadow-lg p-6">
+                <div className="bg-[#0c121e] rounded-2xl shadow-xl border border-white/10 p-6">
                   <h2 className="text-2xl font-bold mb-4">Program Videos</h2>
                   
                   {/* Video Player */}
@@ -294,7 +294,7 @@ export default function CourseDetail() {
                           </div>
                           <div className="flex-1">
                             <h3 className="font-semibold mb-1">{video.title}</h3>
-                            <p className="text-sm text-gray-600">{video.description}</p>
+                            <p className="text-sm text-gray-300">{video.description}</p>
                           </div>
                           {videoCompletion[video.title] && (
                             <div className="ml-4 text-green-500">
@@ -318,7 +318,7 @@ export default function CourseDetail() {
               )}
 
               {activeTab === 'recorded' && (
-                <div className="bg-white rounded-xl shadow-lg p-6">
+                <div className="bg-[#0c121e] rounded-2xl shadow-xl border border-white/10 p-6">
                   <h2 className="text-2xl font-bold mb-4">Recorded Classes</h2>
                   
                   {/* Recorded Class Player */}
@@ -378,7 +378,7 @@ export default function CourseDetail() {
                           </div>
                           <div className="flex-1">
                             <h3 className="font-semibold mb-1">{class_.title}</h3>
-                            <p className="text-sm text-gray-600">{class_.description}</p>
+                            <p className="text-sm text-gray-300">{class_.description}</p>
                             <div className="flex items-center mt-2 text-sm text-gray-500">
                               <Clock className="w-4 h-4 mr-1" />
                               <span>{new Date(class_.date).toLocaleDateString()} at {class_.time}</span>
@@ -392,7 +392,7 @@ export default function CourseDetail() {
               )}
 
               {activeTab === 'resources' && (
-                <div className="bg-white rounded-xl shadow-lg p-6">
+                <div className="bg-[#0c121e] rounded-2xl shadow-xl border border-white/10 p-6">
                   <h2 className="text-2xl font-bold mb-4">Program Resources</h2>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {program.resources.map((resource, index) => (
@@ -419,7 +419,7 @@ export default function CourseDetail() {
               )}
 
               {activeTab === 'tasks' && (
-                <div className="bg-white rounded-xl shadow-lg p-6">
+                <div className="bg-[#0c121e] rounded-2xl shadow-xl border border-white/10 p-6">
                   <h2 className="text-2xl font-bold mb-4">Program Tasks</h2>
                   <div className="space-y-4">
                     {program.tasks.map((task, index) => (
@@ -431,7 +431,7 @@ export default function CourseDetail() {
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <h3 className="text-lg font-semibold mb-2">{task.title}</h3>
-                            <p className="text-gray-600 mb-3">{task.description}</p>
+                            <p className="text-gray-300 mb-3">{task.description}</p>
                             <div className="flex items-center text-sm text-gray-500">
                               <Clock className="w-4 h-4 mr-2" />
                               <span>Deadline: {new Date(task.deadline).toLocaleDateString()} at {task.time}</span>
@@ -454,7 +454,7 @@ export default function CourseDetail() {
             {/* Sidebar */}
             <div className="space-y-8">
               {/* Program Progress */}
-              <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+              <div className="bg-[#0c121e] rounded-2xl shadow-xl border border-white/10 p-6 mb-8">
                 <h2 className="text-xl font-bold mb-4">Program Progress</h2>
                 <div className="relative pt-1">
                   <div className="flex mb-2 items-center justify-between">
@@ -479,35 +479,35 @@ export default function CourseDetail() {
               </div>
 
               {/* Program Info */}
-              <div className="bg-white rounded-xl shadow-lg p-6">
+              <div className="bg-[#0c121e] rounded-2xl shadow-xl border border-white/10 p-6">
                 <h2 className="text-xl font-bold mb-4">Program Information</h2>
                 <ul className="space-y-3">
                   <li className="flex justify-between">
-                    <span className="text-gray-600">Duration:</span>
+                    <span className="text-gray-300">Duration:</span>
                     <span className="font-semibold">{program.duration}</span>
                   </li>
                   <li className="flex justify-between">
-                    <span className="text-gray-600">Price:</span>
+                    <span className="text-gray-300">Price:</span>
                     <span className="font-semibold">₹{program.price}</span>
                   </li>
                   <li className="flex justify-between">
-                    <span className="text-gray-600">Students:</span>
+                    <span className="text-gray-300">Students:</span>
                     <span className="font-semibold">{program.students || 0}</span>
                   </li>
                   <li className="flex justify-between">
-                    <span className="text-gray-600">Rating:</span>
+                    <span className="text-gray-300">Rating:</span>
                     <span className="font-semibold">{program.rating || 'No ratings'}</span>
                   </li>
                 </ul>
               </div>
 
               {/* Access Status */}
-              <div className="bg-white rounded-xl shadow-lg p-6">
+              <div className="bg-[#0c121e] rounded-2xl shadow-xl border border-white/10 p-6">
                 <h2 className="text-xl font-bold mb-4">Access Status</h2>
                 <div className="flex items-center justify-center p-4 bg-gray-50 rounded-lg">
                   <div className="text-center">
                     <Lock className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                    <p className="text-gray-600">
+                    <p className="text-gray-300">
                       Course access is managed by your administrator
                     </p>
                   </div>

@@ -32,7 +32,7 @@ declare module '@codemoon/phonepe-lib' {
 
   export class PhonePe {
     constructor(config: PhonePeConfig);
-    createPaymentPayload(payload: PaymentPayload): any;
-    initiatePayment(payload: any): Promise<PaymentResponse>;
+    createPaymentPayload(payload: PaymentPayload): Record<string, unknown>;
+    initiatePayment(payload: Record<string, unknown>): Promise<PaymentResponse>;
   }
-} 
+}

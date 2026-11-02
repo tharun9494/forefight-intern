@@ -1,15 +1,12 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Users, BookOpen, FileText, Bell, CheckCircle, Upload, Edit, Trash2, Download, Play, Plus, X } from 'lucide-react';
+import { Users, BookOpen, FileText, Bell, CheckCircle, Upload, Edit, Trash2, Download, Plus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { auth, db, storage } from '@/lib/firebase';
+import { auth, db } from '@/lib/firebase';
 import { collection, query, getDocs, updateDoc, doc, addDoc, deleteDoc, where } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import Editor from '@monaco-editor/react';
 import { Dialog } from '@headlessui/react';
-import { Fragment } from 'react';
 
 interface Blog {
   id: string;
@@ -280,8 +277,7 @@ export default function AdminDashboard() {
         references: ''
       });
       fetchBlogs();
-    } catch (error) {
-      toast.error('Failed to add blog post');
+    } catch (error) { console.error(error); toast.error('Failed to add blog post');
     }
   };
 
@@ -309,8 +305,7 @@ export default function AdminDashboard() {
         await deleteDoc(doc(db, 'blogs', blogId));
         toast.success('Blog post deleted successfully!');
         fetchBlogs();
-      } catch (error) {
-        toast.error('Failed to delete blog post');
+      } catch (error) { console.error(error); toast.error('Failed to delete blog post');
       }
     }
   };
@@ -339,8 +334,7 @@ export default function AdminDashboard() {
         tasks: [{ title: '', description: '', deadline: '', time: '' }]
       });
       fetchPrograms();
-    } catch (error) {
-      toast.error('Failed to add program');
+    } catch (error) { console.error(error); toast.error('Failed to add program');
     }
   };
 
@@ -356,8 +350,7 @@ export default function AdminDashboard() {
       toast.success('Program updated successfully!');
       setEditingProgram(null);
       fetchPrograms();
-    } catch (error) {
-      toast.error('Failed to update program');
+    } catch (error) { console.error(error); toast.error('Failed to update program');
     }
   };
 
@@ -367,8 +360,7 @@ export default function AdminDashboard() {
         await deleteDoc(doc(db, 'programs', programId));
         toast.success('Program deleted successfully!');
         fetchPrograms();
-      } catch (error) {
-        toast.error('Failed to delete program');
+      } catch (error) { console.error(error); toast.error('Failed to delete program');
       }
     }
   };
@@ -626,7 +618,7 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-16">
+    <div className="min-h-screen bg-[#070a11] text-gray-100 pt-8 pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -644,40 +636,36 @@ export default function AdminDashboard() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <motion.div
-              whileHover={{ y: -5 }}
-              className="bg-white p-4 rounded-lg shadow-md"
-            >
-              <Users className="w-6 h-6 text-indigo-600 mb-2" />
-              <h3 className="text-xl font-bold">{users.length}</h3>
-              <p className="text-sm text-gray-600">Total Users</p>
+            <motion.div whileHover={{ y: -4 }} className="bg-[#0c121e]/85 border border-white/[0.08] p-5 rounded-xl shadow-xl backdrop-blur-md">
+              <div className="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mb-3">
+                <Users className="w-5 h-5" />
+              </div>
+              <h3 className="text-2xl font-extrabold text-white">{users.length}</h3>
+              <p className="text-xs font-mono text-gray-400 uppercase tracking-wider mt-1">Total Users</p>
             </motion.div>
 
-            <motion.div 
-              whileHover={{ y: -5 }}
-              className="bg-white p-4 rounded-lg shadow-md"
-            >
-              <BookOpen className="w-6 h-6 text-indigo-600 mb-2" />
-              <h3 className="text-xl font-bold">{blogs.length}</h3>
-              <p className="text-sm text-gray-600">Total Blogs</p>
+            <motion.div whileHover={{ y: -4 }} className="bg-[#0c121e]/85 border border-white/[0.08] p-5 rounded-xl shadow-xl backdrop-blur-md">
+              <div className="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mb-3">
+                <BookOpen className="w-5 h-5" />
+              </div>
+              <h3 className="text-2xl font-extrabold text-white">{blogs.length}</h3>
+              <p className="text-xs font-mono text-gray-400 uppercase tracking-wider mt-1">Total Blogs</p>
             </motion.div>
 
-            <motion.div
-              whileHover={{ y: -5 }}
-              className="bg-white p-4 rounded-lg shadow-md"
-            >
-              <Bell className="w-6 h-6 text-indigo-600 mb-2" />
-              <h3 className="text-xl font-bold">{notifications.length}</h3>
-              <p className="text-sm text-gray-600">Notifications</p>
+            <motion.div whileHover={{ y: -4 }} className="bg-[#0c121e]/85 border border-white/[0.08] p-5 rounded-xl shadow-xl backdrop-blur-md">
+              <div className="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mb-3">
+                <Bell className="w-5 h-5" />
+              </div>
+              <h3 className="text-2xl font-extrabold text-white">{notifications.length}</h3>
+              <p className="text-xs font-mono text-gray-400 uppercase tracking-wider mt-1">Notifications</p>
             </motion.div>
 
-            <motion.div
-              whileHover={{ y: -5 }}
-              className="bg-white p-4 rounded-lg shadow-md"
-            >
-              <FileText className="w-6 h-6 text-indigo-600 mb-2" />
-              <h3 className="text-xl font-bold">{programs.length}</h3>
-              <p className="text-sm text-gray-600">Total Programs</p>
+            <motion.div whileHover={{ y: -4 }} className="bg-[#0c121e]/85 border border-white/[0.08] p-5 rounded-xl shadow-xl backdrop-blur-md">
+              <div className="w-10 h-10 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mb-3">
+                <FileText className="w-5 h-5" />
+              </div>
+              <h3 className="text-2xl font-extrabold text-white">{programs.length}</h3>
+              <p className="text-xs font-mono text-gray-400 uppercase tracking-wider mt-1">Total Programs</p>
             </motion.div>
           </div>
 
@@ -712,7 +700,7 @@ export default function AdminDashboard() {
             </Button>
           </div>
 
-          <div className="bg-white rounded-xl shadow-lg p-6">
+          <div className="bg-[#0c121e]/85 border border-white/[0.08] rounded-2xl shadow-2xl p-6 sm:p-8 backdrop-blur-xl">
             {activeTab === 'users' && (
               <div>
                 <div className="flex justify-between items-center mb-6">
@@ -738,43 +726,43 @@ export default function AdminDashboard() {
                   </Button>
                 </div>
                 <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
+                  <table className="min-w-full divide-y divide-white/[0.08]">
                     <thead>
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-6 py-3.5 text-left text-xs font-mono uppercase tracking-wider text-gray-400 bg-white/[0.02]">
                           User
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-6 py-3.5 text-left text-xs font-mono uppercase tracking-wider text-gray-400 bg-white/[0.02]">
                           Role
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-6 py-3.5 text-left text-xs font-mono uppercase tracking-wider text-gray-400 bg-white/[0.02]">
                           Status
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-6 py-3.5 text-left text-xs font-mono uppercase tracking-wider text-gray-400 bg-white/[0.02]">
                           Enrolled Courses
                         </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <th className="px-6 py-3.5 text-left text-xs font-mono uppercase tracking-wider text-gray-400 bg-white/[0.02]">
                           Actions
                         </th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-200">
+                    <tbody className="divide-y divide-white/[0.05]">
                       {users.map((user) => (
                         <tr key={user.id}>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="flex items-center">
                               <div className="ml-4">
-                                <div className="text-sm font-medium text-gray-900">
+                                <div className="text-sm font-semibold text-white">
                                   {user.fullName}
                                 </div>
-                                <div className="text-sm text-gray-500">
+                                <div className="text-xs font-mono text-gray-400">
                                   {user.email}
                                 </div>
                               </div>
                             </div>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                            <span className="px-2.5 py-0.5 inline-flex text-[11px] font-mono leading-5 font-semibold rounded-full bg-blue-500/15 border border-blue-500/30 text-blue-300">
                               {user.role}
                             </span>
                           </td>
@@ -788,10 +776,10 @@ export default function AdminDashboard() {
                             </span>
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="text-sm text-gray-900">
+                            <div className="text-sm font-medium text-white">
                               {user.enrolledCourses?.length || 0} courses
                             </div>
-                            <div className="text-xs text-gray-500 line-clamp-2">
+                            <div className="text-xs text-gray-400 line-clamp-2">
                               {user.enrolledCourses?.map(courseId => {
                                 const course = programs.find(p => p.id === courseId);
                                 return course?.title;
@@ -840,22 +828,22 @@ export default function AdminDashboard() {
                     <form onSubmit={handleAddBlog} className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">Blog Title</label>
+                          <label className="block text-sm font-medium text-gray-300 mb-1">Blog Title</label>
                           <input
                             type="text"
                             placeholder="Enter blog title"
-                            className="w-full p-2 border rounded"
+                            className="w-full p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors"
                             value={newBlog.title}
                             onChange={(e) => setNewBlog({ ...newBlog, title: e.target.value })}
                             required
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                          <label className="block text-sm font-medium text-gray-300 mb-1">Category</label>
                           <input
                             type="text"
                             placeholder="Enter category"
-                            className="w-full p-2 border rounded"
+                            className="w-full p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors"
                             value={newBlog.category}
                             onChange={(e) => setNewBlog({ ...newBlog, category: e.target.value })}
                             required
@@ -864,11 +852,11 @@ export default function AdminDashboard() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Title Image URL</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Title Image URL</label>
                         <input
                           type="url"
                           placeholder="Enter title image URL"
-                          className="w-full p-2 border rounded"
+                          className="w-full p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors"
                           value={newBlog.titleImageUrl}
                           onChange={(e) => setNewBlog({ ...newBlog, titleImageUrl: e.target.value })}
                           required
@@ -876,10 +864,10 @@ export default function AdminDashboard() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Excerpt</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Excerpt</label>
                         <textarea
                           placeholder="Enter a brief excerpt"
-                          className="w-full p-2 border rounded h-20"
+                          className="w-full p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors h-20"
                           value={newBlog.excerpt}
                           onChange={(e) => setNewBlog({ ...newBlog, excerpt: e.target.value })}
                           required
@@ -887,10 +875,10 @@ export default function AdminDashboard() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Blog Content</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Blog Content</label>
                         <textarea
                           placeholder="Enter the main content"
-                          className="w-full p-2 border rounded h-40"
+                          className="w-full p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors h-40"
                           value={newBlog.matter}
                           onChange={(e) => setNewBlog({ ...newBlog, matter: e.target.value })}
                           required
@@ -898,10 +886,10 @@ export default function AdminDashboard() {
                       </div>
  
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">References</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">References</label>
                         <textarea
                           placeholder="Enter references (one per line)"
-                          className="w-full p-2 border rounded h-20"
+                          className="w-full p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors h-20"
                           value={newBlog.references}
                           onChange={(e) => setNewBlog({ ...newBlog, references: e.target.value })}
                         />
@@ -926,22 +914,22 @@ export default function AdminDashboard() {
                     <form onSubmit={handleEditBlog} className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">Blog Title</label>
+                          <label className="block text-sm font-medium text-gray-300 mb-1">Blog Title</label>
                           <input
                             type="text"
                             placeholder="Enter blog title"
-                            className="w-full p-2 border rounded"
+                            className="w-full p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors"
                             value={editingBlog.title}
                             onChange={(e) => setEditingBlog({ ...editingBlog, title: e.target.value })}
                             required
                           />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                          <label className="block text-sm font-medium text-gray-300 mb-1">Category</label>
                           <input
                             type="text"
                             placeholder="Enter category"
-                            className="w-full p-2 border rounded"
+                            className="w-full p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors"
                             value={editingBlog.category}
                             onChange={(e) => setEditingBlog({ ...editingBlog, category: e.target.value })}
                             required
@@ -950,11 +938,11 @@ export default function AdminDashboard() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Title Image URL</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Title Image URL</label>
                         <input
                           type="url"
                           placeholder="Enter title image URL"
-                          className="w-full p-2 border rounded"
+                          className="w-full p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors"
                           value={editingBlog.titleImageUrl}
                           onChange={(e) => setEditingBlog({ ...editingBlog, titleImageUrl: e.target.value })}
                           required
@@ -962,10 +950,10 @@ export default function AdminDashboard() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Excerpt</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Excerpt</label>
                         <textarea
                           placeholder="Enter a brief excerpt"
-                          className="w-full p-2 border rounded h-20"
+                          className="w-full p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors h-20"
                           value={editingBlog.excerpt}
                           onChange={(e) => setEditingBlog({ ...editingBlog, excerpt: e.target.value })}
                           required
@@ -973,10 +961,10 @@ export default function AdminDashboard() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Blog Content</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Blog Content</label>
                         <textarea
                           placeholder="Enter the main content"
-                          className="w-full p-2 border rounded h-40"
+                          className="w-full p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors h-40"
                           value={editingBlog.matter}
                           onChange={(e) => setEditingBlog({ ...editingBlog, matter: e.target.value })}
                           required
@@ -984,10 +972,10 @@ export default function AdminDashboard() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">References</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">References</label>
                         <textarea
                           placeholder="Enter references (one per line)"
-                          className="w-full p-2 border rounded h-20"
+                          className="w-full p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors h-20"
                           value={editingBlog.references}
                           onChange={(e) => setEditingBlog({ ...editingBlog, references: e.target.value })}
                         />
@@ -1012,7 +1000,7 @@ export default function AdminDashboard() {
                     <motion.div
                       key={blog.id}
                       whileHover={{ y: -5 }}
-                      className="bg-white rounded-lg shadow p-4 border"
+                      className="bg-[#070a11]/85 border border-white/[0.08] hover:border-amber-500/30 rounded-xl p-5 shadow-lg transition-all"
                     >
                       <div className="mb-3">
                         {blog.titleImageUrl && (
@@ -1029,7 +1017,7 @@ export default function AdminDashboard() {
                         </div>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-xs text-indigo-600 font-semibold">
+                        <span className="text-xs text-amber-400 font-semibold">
                           {new Date(blog.createdAt).toLocaleDateString()}
                         </span>
                         <div className="flex space-x-1">
@@ -1069,25 +1057,22 @@ export default function AdminDashboard() {
                   <div className="mb-6">
                     <form onSubmit={editingProgram ? handleUpdateProgram : handleAddProgram} className="space-y-6">
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Program Title</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Program Title</label>
                         <input
                           type="text"
                           placeholder="Enter program title"
-                          className="w-full p-2 border rounded"
+                          className="w-full p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors"
                           value={editingProgram ? editingProgram.title : newProgram.title}
-                          onChange={(e) => editingProgram
-                            ? setEditingProgram({ ...editingProgram, title: e.target.value })
-                            : setNewProgram({ ...newProgram, title: e.target.value })
-                          }
+                          onChange={(e) => { if (editingProgram) { setEditingProgram({ ...editingProgram, title: e.target.value }); } else { setNewProgram({ ...newProgram, title: e.target.value }); } }}
                           required
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">About Program</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">About Program</label>
                         <textarea
                           placeholder="Enter program description"
-                          className="w-full p-2 border rounded h-32"
+                          className="w-full p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors h-32"
                           value={editingProgram ? editingProgram.about : newProgram.about}
                           onChange={(e) => editingProgram
                             ? setEditingProgram({ ...editingProgram, about: e.target.value })
@@ -1098,11 +1083,11 @@ export default function AdminDashboard() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Price</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Price</label>
                         <input
                           type="text"
                           placeholder="Enter program price"
-                          className="w-full p-2 border rounded"
+                          className="w-full p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors"
                           value={editingProgram ? editingProgram.price : newProgram.price}
                           onChange={(e) => editingProgram
                             ? setEditingProgram({ ...editingProgram, price: e.target.value })
@@ -1113,11 +1098,11 @@ export default function AdminDashboard() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Duration</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Duration</label>
                         <input
                           type="text"
                           placeholder="Enter program duration (e.g., 3 months)"
-                          className="w-full p-2 border rounded"
+                          className="w-full p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors"
                           value={editingProgram ? editingProgram.duration : newProgram.duration}
                           onChange={(e) => editingProgram
                             ? setEditingProgram({ ...editingProgram, duration: e.target.value })
@@ -1128,11 +1113,11 @@ export default function AdminDashboard() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Title Image URL</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Title Image URL</label>
                         <input
                           type="url"
                           placeholder="Enter program title image URL"
-                          className="w-full p-2 border rounded"
+                          className="w-full p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors"
                           value={editingProgram ? editingProgram.titleImageUrl : newProgram.titleImageUrl}
                           onChange={(e) => editingProgram
                             ? setEditingProgram({ ...editingProgram, titleImageUrl: e.target.value })
@@ -1151,20 +1136,22 @@ export default function AdminDashboard() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Prerequisites</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Prerequisites</label>
                         {(editingProgram ? editingProgram.prerequisites : newProgram.prerequisites).map((req, index) => (
                           <div key={index} className="flex items-center gap-2 mb-2">
                             <input
                               type="text"
                               placeholder="Enter prerequisite"
-                              className="flex-1 p-2 border rounded"
+                              className="flex-1 p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors"
                               value={req}
                               onChange={(e) => {
                                 const newReqs = [...(editingProgram ? editingProgram.prerequisites : newProgram.prerequisites)];
                                 newReqs[index] = e.target.value;
-                                editingProgram
-                                  ? setEditingProgram({ ...editingProgram, prerequisites: newReqs })
-                                  : setNewProgram({ ...newProgram, prerequisites: newReqs });
+                                if (editingProgram) {
+                                  setEditingProgram({ ...editingProgram, prerequisites: newReqs });
+                                } else {
+                                  setNewProgram({ ...newProgram, prerequisites: newReqs });
+                                }
                               }}
                               required
                             />
@@ -1172,10 +1159,7 @@ export default function AdminDashboard() {
                               type="button"
                               variant="ghost"
                               size="sm"
-                              onClick={() => editingProgram
-                                ? setEditingProgram({ ...editingProgram, prerequisites: editingProgram.prerequisites.filter((_, i) => i !== index) })
-                                : removePrerequisite(index)
-                              }
+                              onClick={() => { if (editingProgram) { setEditingProgram({ ...editingProgram, prerequisites: editingProgram.prerequisites.filter((_, i) => i !== index) }); } else { removePrerequisite(index); } }}
                             >
                               <X className="w-4 h-4" />
                             </Button>
@@ -1185,10 +1169,7 @@ export default function AdminDashboard() {
                           type="button"
                           variant="outline"
                           size="sm"
-                          onClick={() => editingProgram
-                            ? setEditingProgram({ ...editingProgram, prerequisites: [...editingProgram.prerequisites, ''] })
-                            : addPrerequisite()
-                          }
+                          onClick={() => { if (editingProgram) { setEditingProgram({ ...editingProgram, prerequisites: [...editingProgram.prerequisites, ''] }); } else { addPrerequisite(); } }}
                           className="mt-2"
                         >
                           <Plus className="w-4 h-4 mr-2" />
@@ -1197,20 +1178,18 @@ export default function AdminDashboard() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Learning Objectives</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Learning Objectives</label>
                         {(editingProgram ? editingProgram.learningObjectives : newProgram.learningObjectives).map((obj, index) => (
                           <div key={index} className="flex items-center gap-2 mb-2">
                             <input
                               type="text"
                               placeholder="Enter learning objective"
-                              className="flex-1 p-2 border rounded"
+                              className="flex-1 p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors"
                               value={obj}
                               onChange={(e) => {
                                 const newObjs = [...(editingProgram ? editingProgram.learningObjectives : newProgram.learningObjectives)];
                                 newObjs[index] = e.target.value;
-                                editingProgram
-                                  ? setEditingProgram({ ...editingProgram, learningObjectives: newObjs })
-                                  : setNewProgram({ ...newProgram, learningObjectives: newObjs });
+                                if (editingProgram) { setEditingProgram({ ...editingProgram, learningObjectives: newObjs }); } else { setNewProgram({ ...newProgram, learningObjectives: newObjs }); }
                               }}
                               required
                             />
@@ -1218,10 +1197,7 @@ export default function AdminDashboard() {
                               type="button"
                               variant="ghost"
                               size="sm"
-                              onClick={() => editingProgram
-                                ? setEditingProgram({ ...editingProgram, learningObjectives: editingProgram.learningObjectives.filter((_, i) => i !== index) })
-                                : removeLearningObjective(index)
-                              }
+                              onClick={() => { if (editingProgram) { setEditingProgram({ ...editingProgram, learningObjectives: editingProgram.learningObjectives.filter((_, i) => i !== index) }); } else { removeLearningObjective(index); } }}
                             >
                               <X className="w-4 h-4" />
                             </Button>
@@ -1231,10 +1207,7 @@ export default function AdminDashboard() {
                           type="button"
                           variant="outline"
                           size="sm"
-                          onClick={() => editingProgram
-                            ? setEditingProgram({ ...editingProgram, learningObjectives: [...editingProgram.learningObjectives, ''] })
-                            : addLearningObjective()
-                          }
+                          onClick={() => { if (editingProgram) { setEditingProgram({ ...editingProgram, learningObjectives: [...editingProgram.learningObjectives, ''] }); } else { addLearningObjective(); } }}
                           className="mt-2"
                         >
                           <Plus className="w-4 h-4 mr-2" />
@@ -1243,21 +1216,19 @@ export default function AdminDashboard() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Videos</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Videos</label>
                         {(editingProgram ? editingProgram.videos : newProgram.videos).map((video, index) => (
                           <div key={index} className="border p-4 rounded-lg mb-4">
                             <div className="flex items-center gap-2 mb-2">
                               <input
                                 type="text"
                                 placeholder="Video Title"
-                                className="flex-1 p-2 border rounded"
+                                className="flex-1 p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors"
                                 value={video.title}
                                 onChange={(e) => {
                                   const newVideos = [...(editingProgram ? editingProgram.videos : newProgram.videos)];
                                   newVideos[index] = { ...newVideos[index], title: e.target.value };
-                                  editingProgram
-                                    ? setEditingProgram({ ...editingProgram, videos: newVideos })
-                                    : setNewProgram({ ...newProgram, videos: newVideos });
+                                  if (editingProgram) { setEditingProgram({ ...editingProgram, videos: newVideos }); } else { setNewProgram({ ...newProgram, videos: newVideos }); }
                                 }}
                                 required
                               />
@@ -1265,10 +1236,7 @@ export default function AdminDashboard() {
                                 type="button"
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => editingProgram
-                                  ? setEditingProgram({ ...editingProgram, videos: editingProgram.videos.filter((_, i) => i !== index) })
-                                  : removeVideo(index)
-                                }
+                                onClick={() => { if (editingProgram) { setEditingProgram({ ...editingProgram, videos: editingProgram.videos.filter((_, i) => i !== index) }); } else { removeVideo(index); } }}
                               >
                                 <X className="w-4 h-4" />
                               </Button>
@@ -1281,22 +1249,18 @@ export default function AdminDashboard() {
                               onChange={(e) => {
                                 const newVideos = [...(editingProgram ? editingProgram.videos : newProgram.videos)];
                                 newVideos[index] = { ...newVideos[index], url: e.target.value };
-                                editingProgram
-                                  ? setEditingProgram({ ...editingProgram, videos: newVideos })
-                                  : setNewProgram({ ...newProgram, videos: newVideos });
+                                if (editingProgram) { setEditingProgram({ ...editingProgram, videos: newVideos }); } else { setNewProgram({ ...newProgram, videos: newVideos }); }
                               }}
                               required
                             />
                             <textarea
                               placeholder="Video Description"
-                              className="w-full p-2 border rounded"
+                              className="w-full p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors"
                               value={video.description}
                               onChange={(e) => {
                                 const newVideos = [...(editingProgram ? editingProgram.videos : newProgram.videos)];
                                 newVideos[index] = { ...newVideos[index], description: e.target.value };
-                                editingProgram
-                                  ? setEditingProgram({ ...editingProgram, videos: newVideos })
-                                  : setNewProgram({ ...newProgram, videos: newVideos });
+                                if (editingProgram) { setEditingProgram({ ...editingProgram, videos: newVideos }); } else { setNewProgram({ ...newProgram, videos: newVideos }); }
                               }}
                               required
                             />
@@ -1306,10 +1270,7 @@ export default function AdminDashboard() {
                           type="button"
                           variant="outline"
                           size="sm"
-                          onClick={() => editingProgram
-                            ? setEditingProgram({ ...editingProgram, videos: [...editingProgram.videos, { title: '', url: '', description: '' }] })
-                            : addVideo()
-                          }
+                          onClick={() => { if (editingProgram) { setEditingProgram({ ...editingProgram, videos: [...editingProgram.videos, { title: '', url: '', description: '' }] }); } else { addVideo(); } }}
                           className="mt-2"
                         >
                           <Plus className="w-4 h-4 mr-2" />
@@ -1318,21 +1279,19 @@ export default function AdminDashboard() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Recorded Classes</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Recorded Classes</label>
                         {(editingProgram ? editingProgram.recordedClasses : newProgram.recordedClasses).map((class_, index) => (
                           <div key={index} className="border p-4 rounded-lg mb-4">
                             <div className="flex items-center gap-2 mb-2">
                               <input
                                 type="text"
                                 placeholder="Class Title"
-                                className="flex-1 p-2 border rounded"
+                                className="flex-1 p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors"
                                 value={class_.title}
                                 onChange={(e) => {
                                   const newClasses = [...(editingProgram ? editingProgram.recordedClasses : newProgram.recordedClasses)];
                                   newClasses[index] = { ...newClasses[index], title: e.target.value };
-                                  editingProgram
-                                    ? setEditingProgram({ ...editingProgram, recordedClasses: newClasses })
-                                    : setNewProgram({ ...newProgram, recordedClasses: newClasses });
+                                  if (editingProgram) { setEditingProgram({ ...editingProgram, recordedClasses: newClasses }); } else { setNewProgram({ ...newProgram, recordedClasses: newClasses }); }
                                 }}
                                 required
                               />
@@ -1340,10 +1299,7 @@ export default function AdminDashboard() {
                                 type="button"
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => editingProgram
-                                  ? setEditingProgram({ ...editingProgram, recordedClasses: editingProgram.recordedClasses.filter((_, i) => i !== index) })
-                                  : removeRecordedClass(index)
-                                }
+                                onClick={() => { if (editingProgram) { setEditingProgram({ ...editingProgram, recordedClasses: editingProgram.recordedClasses.filter((_, i) => i !== index) }); } else { removeRecordedClass(index); } }}
                               >
                                 <X className="w-4 h-4" />
                               </Button>
@@ -1357,9 +1313,7 @@ export default function AdminDashboard() {
                                 onChange={(e) => {
                                   const newClasses = [...(editingProgram ? editingProgram.recordedClasses : newProgram.recordedClasses)];
                                   newClasses[index] = { ...newClasses[index], date: e.target.value };
-                                  editingProgram
-                                    ? setEditingProgram({ ...editingProgram, recordedClasses: newClasses })
-                                    : setNewProgram({ ...newProgram, recordedClasses: newClasses });
+                                  if (editingProgram) { setEditingProgram({ ...editingProgram, recordedClasses: newClasses }); } else { setNewProgram({ ...newProgram, recordedClasses: newClasses }); }
                                 }}
                                 required
                               />
@@ -1371,9 +1325,7 @@ export default function AdminDashboard() {
                                 onChange={(e) => {
                                   const newClasses = [...(editingProgram ? editingProgram.recordedClasses : newProgram.recordedClasses)];
                                   newClasses[index] = { ...newClasses[index], time: e.target.value };
-                                  editingProgram
-                                    ? setEditingProgram({ ...editingProgram, recordedClasses: newClasses })
-                                    : setNewProgram({ ...newProgram, recordedClasses: newClasses });
+                                  if (editingProgram) { setEditingProgram({ ...editingProgram, recordedClasses: newClasses }); } else { setNewProgram({ ...newProgram, recordedClasses: newClasses }); }
                                 }}
                                 required
                               />
@@ -1386,22 +1338,18 @@ export default function AdminDashboard() {
                               onChange={(e) => {
                                 const newClasses = [...(editingProgram ? editingProgram.recordedClasses : newProgram.recordedClasses)];
                                 newClasses[index] = { ...newClasses[index], url: e.target.value };
-                                editingProgram
-                                  ? setEditingProgram({ ...editingProgram, recordedClasses: newClasses })
-                                  : setNewProgram({ ...newProgram, recordedClasses: newClasses });
+                                if (editingProgram) { setEditingProgram({ ...editingProgram, recordedClasses: newClasses }); } else { setNewProgram({ ...newProgram, recordedClasses: newClasses }); }
                               }}
                               required
                             />
                             <textarea
                               placeholder="Class Description"
-                              className="w-full p-2 border rounded"
+                              className="w-full p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors"
                               value={class_.description}
                               onChange={(e) => {
                                 const newClasses = [...(editingProgram ? editingProgram.recordedClasses : newProgram.recordedClasses)];
                                 newClasses[index] = { ...newClasses[index], description: e.target.value };
-                                editingProgram
-                                  ? setEditingProgram({ ...editingProgram, recordedClasses: newClasses })
-                                  : setNewProgram({ ...newProgram, recordedClasses: newClasses });
+                                if (editingProgram) { setEditingProgram({ ...editingProgram, recordedClasses: newClasses }); } else { setNewProgram({ ...newProgram, recordedClasses: newClasses }); }
                               }}
                               required
                             />
@@ -1411,10 +1359,7 @@ export default function AdminDashboard() {
                           type="button"
                           variant="outline"
                           size="sm"
-                          onClick={() => editingProgram
-                            ? setEditingProgram({ ...editingProgram, recordedClasses: [...editingProgram.recordedClasses, { title: '', url: '', description: '', date: '', time: '' }] })
-                            : addRecordedClass()
-                          }
+                          onClick={() => { if (editingProgram) { setEditingProgram({ ...editingProgram, recordedClasses: [...editingProgram.recordedClasses, { title: '', url: '', description: '', date: '', time: '' }] }); } else { addRecordedClass(); } }}
                           className="mt-2"
                         >
                           <Plus className="w-4 h-4 mr-2" />
@@ -1423,21 +1368,19 @@ export default function AdminDashboard() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Resources</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Resources</label>
                         {(editingProgram ? editingProgram.resources : newProgram.resources).map((resource, index) => (
                           <div key={index} className="border p-4 rounded-lg mb-4">
                             <div className="flex items-center gap-2 mb-2">
                               <input
                                 type="text"
                                 placeholder="Resource Title"
-                                className="flex-1 p-2 border rounded"
+                                className="flex-1 p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors"
                                 value={resource.title}
                                 onChange={(e) => {
                                   const newResources = [...(editingProgram ? editingProgram.resources : newProgram.resources)];
                                   newResources[index] = { ...newResources[index], title: e.target.value };
-                                  editingProgram
-                                    ? setEditingProgram({ ...editingProgram, resources: newResources })
-                                    : setNewProgram({ ...newProgram, resources: newResources });
+                                  if (editingProgram) { setEditingProgram({ ...editingProgram, resources: newResources }); } else { setNewProgram({ ...newProgram, resources: newResources }); }
                                 }}
                                 required
                               />
@@ -1447,9 +1390,7 @@ export default function AdminDashboard() {
                                 onChange={(e) => {
                                   const newResources = [...(editingProgram ? editingProgram.resources : newProgram.resources)];
                                   newResources[index] = { ...newResources[index], type: e.target.value as 'pdf' | 'video' };
-                                  editingProgram
-                                    ? setEditingProgram({ ...editingProgram, resources: newResources })
-                                    : setNewProgram({ ...newProgram, resources: newResources });
+                                  if (editingProgram) { setEditingProgram({ ...editingProgram, resources: newResources }); } else { setNewProgram({ ...newProgram, resources: newResources }); }
                                 }}
                               >
                                 <option value="pdf">PDF</option>
@@ -1459,10 +1400,7 @@ export default function AdminDashboard() {
                                 type="button"
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => editingProgram
-                                  ? setEditingProgram({ ...editingProgram, resources: editingProgram.resources.filter((_, i) => i !== index) })
-                                  : removeResource(index)
-                                }
+                                onClick={() => { if (editingProgram) { setEditingProgram({ ...editingProgram, resources: editingProgram.resources.filter((_, i) => i !== index) }); } else { removeResource(index); } }}
                               >
                                 <X className="w-4 h-4" />
                               </Button>
@@ -1470,14 +1408,12 @@ export default function AdminDashboard() {
                             <input
                               type="url"
                               placeholder="Resource URL"
-                              className="w-full p-2 border rounded"
+                              className="w-full p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors"
                               value={resource.url}
                               onChange={(e) => {
                                 const newResources = [...(editingProgram ? editingProgram.resources : newProgram.resources)];
                                 newResources[index] = { ...newResources[index], url: e.target.value };
-                                editingProgram
-                                  ? setEditingProgram({ ...editingProgram, resources: newResources })
-                                  : setNewProgram({ ...newProgram, resources: newResources });
+                                if (editingProgram) { setEditingProgram({ ...editingProgram, resources: newResources }); } else { setNewProgram({ ...newProgram, resources: newResources }); }
                               }}
                               required
                             />
@@ -1487,10 +1423,7 @@ export default function AdminDashboard() {
                           type="button"
                           variant="outline"
                           size="sm"
-                          onClick={() => editingProgram
-                            ? setEditingProgram({ ...editingProgram, resources: [...editingProgram.resources, { title: '', url: '', type: 'pdf' }] })
-                            : addResource()
-                          }
+                          onClick={() => { if (editingProgram) { setEditingProgram({ ...editingProgram, resources: [...editingProgram.resources, { title: '', url: '', type: 'pdf' }] }); } else { addResource(); } }}
                           className="mt-2"
                         >
                           <Plus className="w-4 h-4 mr-2" />
@@ -1499,21 +1432,19 @@ export default function AdminDashboard() {
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Tasks</label>
+                        <label className="block text-sm font-medium text-gray-300 mb-1">Tasks</label>
                         {(editingProgram ? editingProgram.tasks : newProgram.tasks).map((task, index) => (
                           <div key={index} className="border p-4 rounded-lg mb-4">
                             <div className="flex items-center gap-2 mb-2">
                               <input
                                 type="text"
                                 placeholder="Task Title"
-                                className="flex-1 p-2 border rounded"
+                                className="flex-1 p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors"
                                 value={task.title}
                                 onChange={(e) => {
                                   const newTasks = [...(editingProgram ? editingProgram.tasks : newProgram.tasks)];
                                   newTasks[index] = { ...newTasks[index], title: e.target.value };
-                                  editingProgram
-                                    ? setEditingProgram({ ...editingProgram, tasks: newTasks })
-                                    : setNewProgram({ ...newProgram, tasks: newTasks });
+                                  if (editingProgram) { setEditingProgram({ ...editingProgram, tasks: newTasks }); } else { setNewProgram({ ...newProgram, tasks: newTasks }); }
                                 }}
                                 required
                               />
@@ -1521,10 +1452,7 @@ export default function AdminDashboard() {
                                 type="button"
                                 variant="ghost"
                                 size="sm"
-                                onClick={() => editingProgram
-                                  ? setEditingProgram({ ...editingProgram, tasks: editingProgram.tasks.filter((_, i) => i !== index) })
-                                  : removeTask(index)
-                                }
+                                onClick={() => { if (editingProgram) { setEditingProgram({ ...editingProgram, tasks: editingProgram.tasks.filter((_, i) => i !== index) }); } else { removeTask(index); } }}
                               >
                                 <X className="w-4 h-4" />
                               </Button>
@@ -1538,9 +1466,7 @@ export default function AdminDashboard() {
                                 onChange={(e) => {
                                   const newTasks = [...(editingProgram ? editingProgram.tasks : newProgram.tasks)];
                                   newTasks[index] = { ...newTasks[index], deadline: e.target.value };
-                                  editingProgram
-                                    ? setEditingProgram({ ...editingProgram, tasks: newTasks })
-                                    : setNewProgram({ ...newProgram, tasks: newTasks });
+                                  if (editingProgram) { setEditingProgram({ ...editingProgram, tasks: newTasks }); } else { setNewProgram({ ...newProgram, tasks: newTasks }); }
                                 }}
                                 required
                               />
@@ -1552,23 +1478,19 @@ export default function AdminDashboard() {
                                 onChange={(e) => {
                                   const newTasks = [...(editingProgram ? editingProgram.tasks : newProgram.tasks)];
                                   newTasks[index] = { ...newTasks[index], time: e.target.value };
-                                  editingProgram
-                                    ? setEditingProgram({ ...editingProgram, tasks: newTasks })
-                                    : setNewProgram({ ...newProgram, tasks: newTasks });
+                                  if (editingProgram) { setEditingProgram({ ...editingProgram, tasks: newTasks }); } else { setNewProgram({ ...newProgram, tasks: newTasks }); }
                                 }}
                                 required
                               />
                             </div>
                             <textarea
                               placeholder="Task Description"
-                              className="w-full p-2 border rounded"
+                              className="w-full p-2.5 bg-[#070a11] border border-white/[0.1] rounded-lg text-white placeholder-gray-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none text-sm transition-colors"
                               value={task.description}
                               onChange={(e) => {
                                 const newTasks = [...(editingProgram ? editingProgram.tasks : newProgram.tasks)];
                                 newTasks[index] = { ...newTasks[index], description: e.target.value };
-                                editingProgram
-                                  ? setEditingProgram({ ...editingProgram, tasks: newTasks })
-                                  : setNewProgram({ ...newProgram, tasks: newTasks });
+                                if (editingProgram) { setEditingProgram({ ...editingProgram, tasks: newTasks }); } else { setNewProgram({ ...newProgram, tasks: newTasks }); }
                               }}
                               required
                             />
@@ -1578,10 +1500,7 @@ export default function AdminDashboard() {
                           type="button"
                           variant="outline"
                           size="sm"
-                          onClick={() => editingProgram
-                            ? setEditingProgram({ ...editingProgram, tasks: [...editingProgram.tasks, { title: '', description: '', deadline: '', time: '' }] })
-                            : addTask()
-                          }
+                          onClick={() => { if (editingProgram) { setEditingProgram({ ...editingProgram, tasks: [...editingProgram.tasks, { title: '', description: '', deadline: '', time: '' }] }); } else { addTask(); } }}
                           className="mt-2"
                         >
                           <Plus className="w-4 h-4 mr-2" />
@@ -1613,7 +1532,7 @@ export default function AdminDashboard() {
                     <motion.div
                       key={program.id}
                       whileHover={{ y: -5 }}
-                      className="bg-white rounded-lg shadow p-4 border"
+                      className="bg-[#070a11]/85 border border-white/[0.08] hover:border-amber-500/30 rounded-xl p-5 shadow-lg transition-all"
                     >
                       <div className="mb-3">
                         {program.titleImageUrl && (
@@ -1630,7 +1549,7 @@ export default function AdminDashboard() {
                         </div>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-xs text-indigo-600 font-semibold">
+                        <span className="text-xs text-amber-400 font-semibold">
                           {new Date(program.createdAt).toLocaleDateString()}
                         </span>
                         <div className="flex space-x-1">
@@ -1667,7 +1586,7 @@ export default function AdminDashboard() {
                       <motion.div
                         key={notification.id}
                         whileHover={{ y: -5 }}
-                        className="bg-white rounded-lg shadow p-6 border"
+                        className="bg-[#070a11]/85 border border-white/[0.08] hover:border-amber-500/30 rounded-xl p-6 shadow-lg transition-all"
                       >
                         <h3 className="text-lg font-bold mb-2">{notification.name}</h3>
                         <p className="text-gray-600 mb-4">{notification.email}</p>
@@ -1702,15 +1621,15 @@ export default function AdminDashboard() {
               &#8203;
             </span>
 
-            <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+            <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-[#0c121e] border border-white/[0.1] shadow-2xl rounded-2xl text-gray-100">
               <Dialog.Title
                 as="h3"
-                className="text-lg font-medium leading-6 text-gray-900 mb-4"
+                className="text-lg font-bold leading-6 text-white mb-4"
               >
                 Manage Course Access for {selectedUser?.fullName}
               </Dialog.Title>
 
-              <div className="mb-4 text-sm text-gray-600">
+              <div className="mb-4 text-xs text-gray-400">
                 Select the courses this user should have access to. Unselected courses will be inaccessible.
               </div>
 
@@ -1718,7 +1637,7 @@ export default function AdminDashboard() {
                 <div className="space-y-4">
                   <div className="max-h-96 overflow-y-auto">
                     {programs.map((program) => (
-                      <div key={program.id} className="flex items-start space-x-3 p-2 hover:bg-gray-50 rounded">
+                      <div key={program.id} className="flex items-start space-x-3 p-2.5 hover:bg-white/[0.04] rounded-lg transition-colors border border-transparent hover:border-white/[0.05]">
                         <input
                           type="checkbox"
                           id={`program-${program.id}`}
@@ -1730,11 +1649,11 @@ export default function AdminDashboard() {
                               setSelectedPrograms(selectedPrograms.filter(id => id !== program.id));
                             }
                           }}
-                          className="mt-1 h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                          className="mt-1 h-4 w-4 text-amber-400 focus:ring-indigo-500 border-gray-300 rounded"
                         />
                         <label htmlFor={`program-${program.id}`} className="flex-1">
-                          <div className="font-medium text-gray-900">{program.title}</div>
-                          <div className="text-sm text-gray-500">
+                          <div className="font-semibold text-white text-sm">{program.title}</div>
+                          <div className="text-xs text-gray-400">
                             Duration: {program.duration} | Price: ${program.price}
                           </div>
                         </label>

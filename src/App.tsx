@@ -4,6 +4,7 @@ import { AuthProvider } from '@/lib/auth';
 import CourseAccessControl from '@/components/CourseAccessControl';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import ScrollManager from './components/ScrollManager';
 import Home from './pages/Home';
 import Programs from './pages/Programs';
 import Blogs from './pages/Blogs';
@@ -29,9 +30,14 @@ function App() {
     const checkAdmin = async () => {
       const unsubscribe = auth.onAuthStateChanged(async (user) => {
         if (user) {
-          const userDoc = await getDoc(doc(db, 'users', user.uid));
-          const userData = userDoc.data();
-          setIsAdmin(userData?.email === 'ontimittatharun2002@gmail.com');
+          try {
+            const userDoc = await getDoc(doc(db, 'users', user.uid));
+            const userData = userDoc.data();
+            setIsAdmin(userData?.email === 'ontimittatharun2002@gmail.com');
+          } catch (err) {
+            console.error('Admin verification error:', err);
+            setIsAdmin(false);
+          }
         } else {
           setIsAdmin(false);
         }
@@ -46,7 +52,8 @@ function App() {
   return (
     <AuthProvider>
       <Router>
-        <div className="min-h-screen bg-gray-50 flex flex-col">
+        <ScrollManager />
+        <div className="min-h-screen bg-[#070a11] text-gray-100 selection:bg-amber-500/30 selection:text-amber-200 flex flex-col antialiased">
           <Navbar isAdmin={isAdmin} />
           <div className="flex-grow pt-16">
             <Routes>
@@ -76,7 +83,18 @@ function App() {
             </Routes>
           </div>
           <Footer />
-          <Toaster position="top-right" />
+          <Toaster
+            position="top-right"
+            containerStyle={{ zIndex: 2000 }}
+            toastOptions={{
+              style: {
+                background: '#0c121e',
+                color: '#f3f4f6',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                backdropFilter: 'blur(12px)',
+              },
+            }}
+          />
         </div>
       </Router>
     </AuthProvider>
